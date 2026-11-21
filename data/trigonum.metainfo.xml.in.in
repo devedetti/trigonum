@@ -19,6 +19,7 @@
     <ul>
       <li>Opens binary and ASCII STL files, even with millions of triangles</li>
       <li>Shows dimensions, triangle count, volume and surface area</li>
+      <li>Tabs to keep several models open at once</li>
       <li>Optional wireframe overlay</li>
       <li>Reloads the model automatically when the file changes on disk</li>
       <li>Classic interface with menu bar, toolbar and status bar</li>

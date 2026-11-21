@@ -1,5 +1,7 @@
 # Cómo contribuir
 
+*Español · [English](CONTRIBUTING.en.md) · [Português](CONTRIBUTING.pt.md)*
+
 Este documento explica cómo se trabaja en Trigonum: el flujo de ramas, qué corre el CI en cada
 caso y cómo se publica una versión.
 

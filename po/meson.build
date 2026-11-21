@@ -8,5 +8,6 @@ i18n.gettext(
     '--keyword=ngettext:1,2',
     '--keyword=pgettext:1c,2',
     '--msgid-bugs-address=https://github.com/devedetti/trigonum/issues',
+    '--package-version=' + meson.project_version(),
   ],
 )

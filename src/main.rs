@@ -5,6 +5,7 @@ mod i18n;
 mod mesh_info;
 mod renderer;
 mod stl;
+mod tab;
 mod window;
 
 use gettextrs::{LocaleCategory, bind_textdomain_codeset, bindtextdomain, setlocale, textdomain};
@@ -48,15 +49,19 @@ fn main() -> glib::ExitCode {
         app.set_accels_for_action("win.wireframe", &["w"]);
         app.set_accels_for_action("win.fit", &["f"]);
         app.set_accels_for_action("win.info", &["i", "F9"]);
-        app.set_accels_for_action("window.close", &["<Control>w"]);
+        app.set_accels_for_action("win.close-tab", &["<Control>w"]);
+        app.set_accels_for_action("win.next-tab", &["<Control>Tab"]);
+        app.set_accels_for_action("win.prev-tab", &["<Control><Shift>Tab", "<Control><Shift>ISO_Left_Tab"]);
+        for n in 1..=8 {
+            app.set_accels_for_action(&format!("win.goto-tab({})", n - 1), &[&format!("<Alt>{n}")]);
+        }
+        app.set_accels_for_action("win.goto-tab(-1)", &["<Alt>9"]);
         app.set_accels_for_action("app.quit", &["<Control>q"]);
     });
     app.connect_activate(|app| window::Viewer::get_or_create(app).present());
     app.connect_open(|app, files, _| {
         let v = window::Viewer::get_or_create(app);
-        if let Some(f) = files.first() {
-            v.open(f.clone());
-        }
+        v.open_files(files);
         v.present();
     });
     app.run()

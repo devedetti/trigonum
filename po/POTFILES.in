@@ -3,4 +3,5 @@ data/trigonum.desktop.in.in
 data/trigonum.metainfo.xml.in.in
 src/i18n.rs
 src/stl.rs
+src/tab.rs
 src/window.rs

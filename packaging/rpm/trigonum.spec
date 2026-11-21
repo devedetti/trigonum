@@ -59,7 +59,7 @@ export CARGO_HOME="$PWD/.cargo-home" CARGO_NET_OFFLINE=true
 
 %files -f %{name}.lang
 %license LICENSE
-%doc README.md README.en.md CHANGELOG.md
+%doc README.md README.en.md README.pt.md CHANGELOG.md
 %{_bindir}/%{name}
 %{_datadir}/applications/%{app_id}.desktop
 %{_datadir}/metainfo/%{app_id}.metainfo.xml

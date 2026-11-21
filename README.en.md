@@ -1,6 +1,6 @@
 # Trigonum
 
-*[Español](README.md) · English*
+*[Español](README.md) · English · [Português](README.pt.md)*
 
 > *trigonum*: Latin for “triangle”. An STL file is nothing but a list of triangles.
 
@@ -29,15 +29,15 @@ program done right starts fast, uses what it needs and asks nothing in return.
 
 Bring back desktop apps.
 
-
 ## Features
 
 - Binary and ASCII STL, including models with millions of triangles
 - Dimensions, triangle count, volume and surface area
+- Tabs: several models open at once, each with its own view
 - Wireframe overlay
 - Automatic reload when the file changes on disk (handy with OpenSCAD and CAD exports)
 - Drag and drop, open from the file manager
-- Translations: English, Spanish, Brazilian Portuguese
+- Translations: English, Spanish, Portuguese
 
 ## Controls
 
@@ -50,6 +50,10 @@ Bring back desktop apps.
 | Wireframe | `W` |
 | Information panel | `I` or `F9` |
 | Open / Reload | `Ctrl+O` / `Ctrl+R` or `F5` |
+| Close tab | `Ctrl+W` or middle click on the tab |
+| Next / previous tab | `Ctrl+Tab` / `Ctrl+Shift+Tab`, or `Ctrl+PgDn` / `Ctrl+PgUp` |
+| Go to tab 1…8 / last tab | `Alt+1`…`Alt+8` / `Alt+9` |
+| Quit | `Ctrl+Q` |
 
 ## Installing
 
@@ -140,7 +144,7 @@ can build offline.
 
 The full CI (`.forgejo/workflows/ci.yml`) builds, tests and installs the real package on
 Debian 13, Ubuntu 26.04, Arch, Fedora and openSUSE Tumbleweed. It runs on every RC pull
-request and on demand (see [CONTRIBUTING.md](CONTRIBUTING.md)). To run the same locally with Docker:
+request and on demand (see [CONTRIBUTING.en.md](CONTRIBUTING.en.md)). To run the same locally with Docker:
 
 ```sh
 build-aux/ci/run-local.sh all        # or: debian, ubuntu, arch, fedora, opensuse
@@ -171,7 +175,7 @@ After changing strings in the code: `meson compile -C build trigonum-update-po`.
 Features go through pull requests into a temporary `next` branch, which is renamed to
 `release/X.Y.Z` when a version ships. Its PR into `main` is the RC: it runs the full CI on the
 5 distros and, once merged, the version is published. Details are in
-[CONTRIBUTING.md](CONTRIBUTING.md) (in Spanish).
+[CONTRIBUTING.en.md](CONTRIBUTING.en.md).
 
 ## License
 

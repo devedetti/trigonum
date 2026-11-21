@@ -5,6 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: trigonum 0.1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/devedetti/trigonum/issues\n"
+"POT-Creation-Date: 2026-11-21 13:28-0300\n"
 "PO-Revision-Date: 2026-11-14 00:00-0300\n"
 "Last-Translator: nachopro\n"
 "Language-Team: Spanish\n"
@@ -32,8 +33,12 @@ msgid "3D;STL;model;mesh;printing;CAD;"
 msgstr "3D;STL;model;mesh;printing;CAD;modelo;malla;impresión;"
 
 #: data/trigonum.metainfo.xml.in.in:15
-msgid "Trigonum is a fast, lightweight viewer for STL files, the format used for 3D printing and for exporting models from CAD programs."
-msgstr "Trigonum es un visor rápido y ligero para archivos STL, el formato que se usa en impresión 3D y para exportar modelos desde programas de CAD."
+msgid ""
+"Trigonum is a fast, lightweight viewer for STL files, the format used for 3D "
+"printing and for exporting models from CAD programs."
+msgstr ""
+"Trigonum es un visor rápido y ligero para archivos STL, el formato que se "
+"usa en impresión 3D y para exportar modelos desde programas de CAD."
 
 #: data/trigonum.metainfo.xml.in.in:20
 msgid "Opens binary and ASCII STL files, even with millions of triangles"
@@ -44,22 +49,27 @@ msgid "Shows dimensions, triangle count, volume and surface area"
 msgstr "Muestra dimensiones, cantidad de triángulos, volumen y superficie"
 
 #: data/trigonum.metainfo.xml.in.in:22
+msgid "Tabs to keep several models open at once"
+msgstr "Pestañas para tener varios modelos abiertos a la vez"
+
+#: data/trigonum.metainfo.xml.in.in:23
 msgid "Optional wireframe overlay"
 msgstr "Malla de alambre superpuesta opcional"
 
-#: data/trigonum.metainfo.xml.in.in:23
+#: data/trigonum.metainfo.xml.in.in:24
 msgid "Reloads the model automatically when the file changes on disk"
 msgstr "Recarga el modelo automáticamente cuando el archivo cambia en el disco"
 
-#: data/trigonum.metainfo.xml.in.in:24
+#: data/trigonum.metainfo.xml.in.in:25
 msgid "Classic interface with menu bar, toolbar and status bar"
-msgstr "Interfaz clásica con barra de menús, barra de herramientas y barra de estado"
+msgstr ""
+"Interfaz clásica con barra de menús, barra de herramientas y barra de estado"
 
-#: data/trigonum.metainfo.xml.in.in:49
+#: data/trigonum.metainfo.xml.in.in:53
 msgid "Fixed a crash on startup."
 msgstr "Se corrigió un cierre inesperado al iniciar."
 
-#: data/trigonum.metainfo.xml.in.in:54
+#: data/trigonum.metainfo.xml.in.in:58
 msgid "First release."
 msgstr "Primera versión."
 
@@ -96,95 +106,152 @@ msgstr "Número no válido en el archivo STL ASCII"
 msgid "The file contains no triangles"
 msgstr "El archivo no contiene triángulos"
 
-#: src/window.rs:76
+#: src/tab.rs:89
+msgid "Close tab"
+msgstr "Cerrar pestaña"
+
+#: src/tab.rs:205
+msgid "OpenGL is not available"
+msgstr "OpenGL no está disponible"
+
+#: src/tab.rs:210
+msgid "Could not initialize OpenGL"
+msgstr "No se pudo inicializar OpenGL"
+
+#: src/tab.rs:357
+msgid "Only local files are supported."
+msgstr "Solo se admiten archivos locales."
+
+#: src/tab.rs:359
+#, rust-format
+msgid "Loading {path}…"
+msgstr "Cargando {path}…"
+
+#: src/tab.rs:376
+msgid "internal error while reading"
+msgstr "error interno durante la lectura"
+
+#: src/tab.rs:386
+#, rust-format
+msgid "{count} triangle"
+msgid_plural "{count} triangles"
+msgstr[0] "{count} triángulo"
+msgstr[1] "{count} triángulos"
+
+#. TRANSLATORS: status bar. {name}: file, {triangles}: "N triangles", {size}: "X × Y × Z", {ms}: milliseconds.
+#: src/tab.rs:391
+#, rust-format
+msgid "{name}  ·  {triangles}  ·  {size} mm  ·  loaded in {ms} ms"
+msgstr "{name}  ·  {triangles}  ·  {size} mm  ·  cargado en {ms} ms"
+
+#. TRANSLATORS: same as the "loaded" message, after the file changed on disk.
+#: src/tab.rs:394
+#, rust-format
+msgid "{name}  ·  {triangles}  ·  {size} mm  ·  reloaded in {ms} ms"
+msgstr "{name}  ·  {triangles}  ·  {size} mm  ·  recargado en {ms} ms"
+
+#: src/tab.rs:428
+#, rust-format
+msgid "Could not open “{name}”"
+msgstr "No se pudo abrir «{name}»"
+
+#: src/window.rs:62
 msgid "_Open…"
 msgstr "_Abrir…"
 
-#: src/window.rs:76
+#: src/window.rs:62
 msgid "_Reload"
 msgstr "_Recargar"
 
-#: src/window.rs:80
-msgid "_Close"
-msgstr "_Cerrar"
+#: src/window.rs:64
+msgid "_Close Tab"
+msgstr "_Cerrar pestaña"
 
-#: src/window.rs:80
+#: src/window.rs:65
 msgid "_Quit"
 msgstr "_Salir"
 
-#: src/window.rs:86
+#: src/window.rs:70
 msgid "_Wireframe"
 msgstr "_Malla de alambre"
 
-#: src/window.rs:86
+#: src/window.rs:70
 msgid "_Information Panel"
 msgstr "Panel de _información"
 
-#: src/window.rs:88
+#: src/window.rs:72
 msgid "_Fit Model"
 msgstr "_Encuadrar modelo"
 
-#: src/window.rs:90
+#: src/window.rs:75
+msgid "_Next Tab"
+msgstr "Pestaña _siguiente"
+
+#: src/window.rs:75
+msgid "_Previous Tab"
+msgstr "Pestaña _anterior"
+
+#: src/window.rs:78
 msgid "_Mouse Controls"
 msgstr "_Controles del mouse"
 
-#: src/window.rs:90
+#: src/window.rs:78
 msgid "_About Trigonum"
 msgstr "_Acerca de Trigonum"
 
-#: src/window.rs:93
+#: src/window.rs:81
 msgid "_File"
 msgstr "_Archivo"
 
-#: src/window.rs:94
+#: src/window.rs:82
 msgid "_View"
 msgstr "_Ver"
 
-#: src/window.rs:95
+#: src/window.rs:83
 msgid "_Help"
 msgstr "A_yuda"
 
-#: src/window.rs:144
+#: src/window.rs:132
 msgid "Open"
 msgstr "Abrir"
 
-#: src/window.rs:144
+#: src/window.rs:132
 msgid "Open a file (Ctrl+O)"
 msgstr "Abrir un archivo (Ctrl+O)"
 
-#: src/window.rs:145
+#: src/window.rs:133
 msgid "Reload"
 msgstr "Recargar"
 
-#: src/window.rs:145
+#: src/window.rs:133
 msgid "Reload the model (Ctrl+R)"
 msgstr "Recargar el modelo (Ctrl+R)"
 
-#: src/window.rs:147
+#: src/window.rs:135
 msgid "Fit"
 msgstr "Encuadrar"
 
-#: src/window.rs:147
+#: src/window.rs:135
 msgid "Fit the model in view (F)"
 msgstr "Encuadrar el modelo en la vista (F)"
 
-#: src/window.rs:148
+#: src/window.rs:136
 msgid "Wireframe"
 msgstr "Alambre"
 
-#: src/window.rs:148
+#: src/window.rs:136
 msgid "Show mesh edges (W)"
 msgstr "Mostrar las aristas de la malla (W)"
 
-#: src/window.rs:149
+#: src/window.rs:137
 msgid "Information"
 msgstr "Información"
 
-#: src/window.rs:149
+#: src/window.rs:137
 msgid "Show model information (I)"
 msgstr "Mostrar la información del modelo (I)"
 
-#: src/window.rs:153
+#: src/window.rs:141
 msgid ""
 "No model open.\n"
 "\n"
@@ -194,47 +261,47 @@ msgstr ""
 "\n"
 "Usa Archivo → Abrir (Ctrl+O) o arrastra un archivo STL a esta ventana."
 
-#: src/window.rs:202
+#: src/window.rs:176
 msgid "Model"
 msgstr "Modelo"
 
-#: src/window.rs:203
+#: src/window.rs:177
 msgid "Triangles"
 msgstr "Triángulos"
 
-#: src/window.rs:204
+#: src/window.rs:178
 msgid "Volume"
 msgstr "Volumen"
 
-#: src/window.rs:205
+#: src/window.rs:179
 msgid "Surface area"
 msgstr "Superficie"
 
-#: src/window.rs:206
+#: src/window.rs:180
 msgid "Dimensions (mm)"
 msgstr "Dimensiones (mm)"
 
-#: src/window.rs:207
+#: src/window.rs:181
 msgid "Width (X)"
 msgstr "Ancho (X)"
 
-#: src/window.rs:208
+#: src/window.rs:182
 msgid "Depth (Y)"
 msgstr "Profundidad (Y)"
 
-#: src/window.rs:209
+#: src/window.rs:183
 msgid "Height (Z)"
 msgstr "Alto (Z)"
 
-#: src/window.rs:228
+#: src/window.rs:202 src/window.rs:453
 msgid "Ready"
 msgstr "Listo"
 
-#: src/window.rs:287
+#: src/window.rs:296
 msgid "Mouse Controls"
 msgstr "Controles del mouse"
 
-#: src/window.rs:289
+#: src/window.rs:298
 msgid ""
 "Left button + drag: orbit\n"
 "Middle or right button + drag: pan\n"
@@ -249,77 +316,28 @@ msgstr ""
 "Doble clic: encuadrar el modelo"
 
 #. TRANSLATORS: replace with your name(s), one per line, e.g. "Jane Doe <jane@example.com>".
-#: src/window.rs:296
+#: src/window.rs:305
 msgid "translator-credits"
 msgstr ""
 
-#: src/window.rs:303
+#: src/window.rs:312
 msgid "Lightweight viewer for STL 3D models"
 msgstr "Visor ligero de modelos 3D en formato STL"
 
-#: src/window.rs:335
-msgid "OpenGL is not available"
-msgstr "OpenGL no está disponible"
-
-#: src/window.rs:340
-msgid "Could not initialize OpenGL"
-msgstr "No se pudo inicializar OpenGL"
-
-#: src/window.rs:442
+#: src/window.rs:358
 msgid "STL models"
 msgstr "Modelos STL"
 
-#: src/window.rs:446
+#: src/window.rs:362
 msgid "All files"
 msgstr "Todos los archivos"
 
-#: src/window.rs:452
+#: src/window.rs:368
 msgid "Open STL Model"
 msgstr "Abrir modelo STL"
 
-#: src/window.rs:515
-msgid "Cannot open file"
-msgstr "No se puede abrir el archivo"
-
-#: src/window.rs:515
-msgid "Only local files are supported."
-msgstr "Solo se admiten archivos locales."
-
 #. TRANSLATORS: window title; {name} is the file name.
-#: src/window.rs:522
+#: src/window.rs:464
 #, rust-format
 msgid "{name} — Trigonum"
 msgstr "{name} — Trigonum"
-
-#: src/window.rs:523
-#, rust-format
-msgid "Loading {path}…"
-msgstr "Cargando {path}…"
-
-#: src/window.rs:540
-msgid "internal error while reading"
-msgstr "error interno durante la lectura"
-
-#: src/window.rs:551
-#, rust-format
-msgid "{count} triangle"
-msgid_plural "{count} triangles"
-msgstr[0] "{count} triángulo"
-msgstr[1] "{count} triángulos"
-
-#. TRANSLATORS: status bar. {name}: file, {triangles}: "N triangles", {size}: "X × Y × Z", {ms}: milliseconds.
-#: src/window.rs:556
-#, rust-format
-msgid "{name}  ·  {triangles}  ·  {size} mm  ·  loaded in {ms} ms"
-msgstr "{name}  ·  {triangles}  ·  {size} mm  ·  cargado en {ms} ms"
-
-#. TRANSLATORS: same as the "loaded" message, after the file changed on disk.
-#: src/window.rs:559
-#, rust-format
-msgid "{name}  ·  {triangles}  ·  {size} mm  ·  reloaded in {ms} ms"
-msgstr "{name}  ·  {triangles}  ·  {size} mm  ·  recargado en {ms} ms"
-
-#: src/window.rs:589
-#, rust-format
-msgid "Could not open “{name}”"
-msgstr "No se pudo abrir «{name}»"

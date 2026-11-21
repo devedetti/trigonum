@@ -9,6 +9,18 @@ proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
 ### Agregado
 
+- Pestañas: cada archivo se abre en su propia pestaña en vez de reemplazar al anterior, con
+  su cámara, su modo malla y su información. El panel de información, la barra de estado y
+  el título de la ventana siguen a la pestaña visible. Reabrir un archivo que ya está abierto
+  vuelve a su pestaña y lo relee.
+- Abrir varios archivos a la vez: selección múltiple en el diálogo, arrastrar varios juntos o
+  pasarlos por línea de comandos (antes solo se tomaba el primero).
+- Las pestañas que no están a la vista se parsean recién la primera vez que se muestran, y si
+  su archivo cambia en disco mientras están ocultas se releen al volver a ellas. Así abrir
+  muchos modelos juntos no dispara la RAM ni la CPU.
+- Ver → Pestaña siguiente / anterior (`Ctrl+Tab` / `Ctrl+Mayús+Tab`); también funcionan
+  `Ctrl+AvPág` / `Ctrl+RePág`, y `Alt+1`…`Alt+8` saltan a esa pestaña (`Alt+9`, a la
+  última). Las pestañas se pueden reordenar arrastrándolas.
 - Instrucciones de instalación para cada distro en los READMEs.
 - Flujo de ramas feature → `next` → `release/X.Y.Z` → `main`. `next` es temporal: sale de
   `main` en cada ciclo y se renombra a `release/X.Y.Z` para el RC, así no queda ninguna rama
@@ -16,16 +28,23 @@ proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
   que pueden subir la versión (`build-aux/ci/check-branch.sh`). Al publicar, el release avisa
   si quedó una `next` que no incluye la versión nueva.
 - `CONTRIBUTING.md`: el flujo de ramas, las reglas del CI y cómo publicar una versión.
+- README en portugués y `CONTRIBUTING.md` en inglés y portugués.
 - El CI completo, con los paquetes de las 5 distros como artefactos para probar, corre en el
   PR de cada RC (`release/X.Y.Z` → `main`) y a demanda desde Actions en cualquier rama. En el
   resto de los PR solo corren las reglas de versión y clippy.
 
 ### Cambiado
 
+- La traducción al portugués pasa de `pt_BR` a `pt`, así la toman también Portugal y el resto
+  de los países de habla portuguesa (gettext cae de `pt_PT` a `pt`, pero nunca a `pt_BR`).
+- Archivo → Cerrar pasa a ser Cerrar pestaña (`Ctrl+W`, o clic del medio en la pestaña).
+  Antes cerraba la ventana, que con una sola ventana era lo mismo que Salir.
 - `build-aux/bump-version.sh` solo funciona en la rama `release/<versión nueva>`.
 
 ### Corregido
 
+- Regenerar `po/trigonum.pot` con meson ya no borra la versión del encabezado
+  (`Project-Id-Version`), que el CI exige: ahora se le pasa `--package-version` a xgettext.
 - El PKGBUILD ya no genera un paquete `trigonum-debug` vacío (`options=(!debug)`): el build
   en release no incluye símbolos de depuración.
 - El CI ya no usa la caché de Actions: Forgejo la separa por PR, así que cada PR nuevo

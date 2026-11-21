@@ -1,6 +1,6 @@
 # Trigonum
 
-*Español · [English](README.en.md)*
+*Español · [English](README.en.md) · [Português](README.pt.md)*
 
 > *trigonum*: «triángulo» en latín. Un archivo STL no es más que una lista de triángulos.
 
@@ -33,10 +33,11 @@ Que vuelvan las apps de escritorio.
 
 - Archivos STL binarios y ASCII, incluso modelos con millones de triángulos
 - Dimensiones, cantidad de triángulos, volumen y superficie
+- Pestañas: varios modelos abiertos a la vez, cada uno con su vista
 - Malla de alambre superpuesta
 - Recarga automática cuando el archivo cambia en el disco (ideal para trabajar con OpenSCAD o exportaciones de CAD)
 - Arrastrar y soltar, y apertura desde el gestor de archivos
-- Idiomas: español, portugués de Brasil e inglés
+- Idiomas: español, portugués e inglés
 
 ## Controles
 
@@ -49,6 +50,10 @@ Que vuelvan las apps de escritorio.
 | Malla de alambre | `W` |
 | Panel de información | `I` o `F9` |
 | Abrir / Recargar | `Ctrl+O` / `Ctrl+R` o `F5` |
+| Cerrar pestaña | `Ctrl+W` o clic del medio en la pestaña |
+| Pestaña siguiente / anterior | `Ctrl+Tab` / `Ctrl+Mayús+Tab`, o `Ctrl+AvPág` / `Ctrl+RePág` |
+| Ir a la pestaña 1…8 / a la última | `Alt+1`…`Alt+8` / `Alt+9` |
+| Salir | `Ctrl+Q` |
 
 ## Instalación
 

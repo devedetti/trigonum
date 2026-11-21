@@ -23,7 +23,7 @@ check_binary() {
 }
 
 check_translations() {
-  for lang in es pt_BR; do
+  for lang in es pt; do
     printf '%s\n' "$1" | grep -q "usr/share/locale/$lang/LC_MESSAGES/trigonum.mo" \
       || fail "el paquete no trae la traducción $lang"
   done
