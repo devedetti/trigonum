@@ -1,0 +1,7 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Se crea una sola vez con: osc meta pkg home:nachopro trigonum -F packaging/obs/package.xml -->
+<package name="trigonum" project="home:nachopro">
+  <title>Trigonum</title>
+  <description>Lightweight viewer for STL 3D models, built with GTK 4 and OpenGL.</description>
+  <url>https://github.com/devedetti/trigonum</url>
+</package>

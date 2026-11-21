@@ -9,9 +9,17 @@
 # makepkg: lo que genera al armar el paquete
 /packaging/arch/src/
 /packaging/arch/pkg/
-/packaging/arch/*.tar.gz
-/packaging/arch/*.tar.zst
+/packaging/arch/*.tar.*
 /packaging/arch/*.log
+/packaging/arch/.SRCINFO
+
+# Crates incluidos al armar el tarball y configuración de cargo sin red
+/vendor/
+/.cargo/
+/debian/cargo-home/
+
+# Salida de build-aux/ci/run-local.sh
+/ci-out/
 
 # gettext: catálogos compilados y respaldos de msgmerge
 *.mo

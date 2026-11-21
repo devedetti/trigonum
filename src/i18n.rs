@@ -28,7 +28,7 @@ fn decimal_sep() -> String {
 fn group(digits: &str, sep: &str) -> String {
     let mut out = String::new();
     for (i, c) in digits.chars().enumerate() {
-        if i > 0 && (digits.len() - i).is_multiple_of(3) {
+        if i > 0 && (digits.len() - i) % 3 == 0 {
             out.push_str(sep);
         }
         out.push(c);

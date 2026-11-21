@@ -1,9 +1,9 @@
-# Variante para probar el paquete sin repositorio publicado.
+# Variante para probar el paquete con el código de tu copia local.
 # Uso (desde la raíz del proyecto):
-#   build-aux/local-tarball.sh
+#   build-aux/dist-tarball.sh
 #   cd packaging/arch && makepkg -si -p PKGBUILD.local
 #
 # Reutiliza todo el PKGBUILD real y solo cambia de dónde sale el código.
 source ./PKGBUILD
-source=("$pkgname-$pkgver.tar.gz")
+source=("$pkgname-$pkgver.tar.xz")
 sha256sums=('SKIP')

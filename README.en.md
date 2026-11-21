@@ -51,9 +51,15 @@ Bring back desktop apps.
 | Information panel | `I` or `F9` |
 | Open / Reload | `Ctrl+O` / `Ctrl+R` or `F5` |
 
+## Installing
+
+- **Arch Linux:** [`trigonum`](https://aur.archlinux.org/packages/trigonum) on the AUR.
+- **Debian 13, Ubuntu 26.04, Fedora and openSUSE Tumbleweed:** repositories on the
+  [Open Build Service](https://software.opensuse.org/download.html?project=home%3Anachopro&package=trigonum), with instructions to add them.
+
 ## Building
 
-Requirements: Rust ≥ 1.88 (cargo), Meson ≥ 1.1, GTK ≥ 4.12, gettext.
+Requirements: Rust ≥ 1.85 (cargo), Meson ≥ 1.1, GTK ≥ 4.12, gettext.
 
 ```sh
 meson setup build --buildtype=release
@@ -70,24 +76,22 @@ meson compile -C build
 TRIGONUM_LOCALEDIR=build/po LANGUAGE=es build/trigonum model.stl
 ```
 
-## Arch Linux package
+## Packages and CI
 
-`packaging/arch/PKGBUILD` follows the Arch Rust packaging guidelines.
+Packaging lives in `debian/`, `packaging/rpm/trigonum.spec` and `packaging/arch/PKGBUILD`.
+Each release tarball ships the crates in `vendor/`, so Debian, Ubuntu, Fedora and openSUSE
+can build offline.
 
-Test locally, using your working copy instead of the published tag:
+Every PR on Forgejo builds, tests and installs the real package on Debian 13, Ubuntu 26.04,
+Arch, Fedora and openSUSE Tumbleweed (`.forgejo/workflows/ci.yml`). To run the same locally
+with Docker:
 
 ```sh
-build-aux/local-tarball.sh
-cd packaging/arch
-makepkg -si -p PKGBUILD.local
+build-aux/ci/run-local.sh all        # or: debian, ubuntu, arch, fedora, opensuse
 ```
 
-Publishing to AUR:
-
-1. Tag the release and push it to Forgejo: `git tag v0.1.1 && git push --tags`.
-2. Wait for the mirror to copy it to GitHub, since the PKGBUILD downloads the tarball from there.
-3. In `packaging/arch`: `updpkgsums`, then `makepkg --printsrcinfo > .SRCINFO`.
-4. Clone `ssh://aur@aur.archlinux.org/trigonum.git`, copy `PKGBUILD` and `.SRCINFO`, commit and push.
+Packages end up in `ci-out/`. The minimum Rust version is 1.85, the one in Debian 13;
+clippy warns if anything newer is used.
 
 ## Translations
 
@@ -101,9 +105,13 @@ After changing strings in the code: `meson compile -C build trigonum-update-po`.
 
 ## Releasing a new version
 
-Bump the version in `Cargo.toml` **and** `meson.build` (the build fails if they differ),
-add a `<release>` entry in `data/trigonum.metainfo.xml.in.in`, bump `pkgver` in the PKGBUILD,
-and record the changes in `CHANGELOG.md` (written in Spanish).
+1. Record the changes under `[Unreleased]` in `CHANGELOG.md` (written in Spanish).
+2. Run `build-aux/bump-version.sh X.Y.Z` in the same PR. It updates the version in every file
+   that repeats it and closes the CHANGELOG section.
+3. Merge the PR into `main`. The `release.yml` workflow creates the `vX.Y.Z` tag, uploads the
+   source package to the Open Build Service and updates the AUR.
+
+A merge without a version change publishes nothing.
 
 ## License
 

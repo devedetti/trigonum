@@ -26,17 +26,19 @@ checkdepends=(
   desktop-file-utils
 )
 source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
-# Reemplazar con `updpkgsums` una vez publicado el tag v$pkgver.
-sha256sums=('453d35a4d4696701a769f920c955e589e8b6febde24d2666929541c1ef8af7e5')
+# Plantilla: el workflow de release completa las sumas con updpkgsums y genera el .SRCINFO.
+sha256sums=('SKIP')
 
 prepare() {
   cd "$pkgname-$pkgver"
   export RUSTUP_TOOLCHAIN=stable
+  export CARGO_HOME="$srcdir/cargo-home"
   cargo fetch --locked --target "$(rustc --print host-tuple)"
 }
 
 build() {
   export RUSTUP_TOOLCHAIN=stable
+  export CARGO_HOME="$srcdir/cargo-home"
   export CARGO_NET_OFFLINE=true
   arch-meson "$pkgname-$pkgver" build
   meson compile -C build
@@ -44,10 +46,14 @@ build() {
 
 check() {
   export RUSTUP_TOOLCHAIN=stable
+  export CARGO_HOME="$srcdir/cargo-home"
   export CARGO_NET_OFFLINE=true
   meson test -C build --print-errorlogs
 }
 
 package() {
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_HOME="$srcdir/cargo-home"
+  export CARGO_NET_OFFLINE=true
   meson install -C build --destdir "$pkgdir"
 }

@@ -1,0 +1,5 @@
+trigonum (0.1.1-1) unstable; urgency=medium
+
+  * Paquete inicial para Debian y Ubuntu.
+
+ -- nachopro <tech@local.net.ar>  Sat, 21 Nov 2026 01:04:51 -0300

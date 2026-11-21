@@ -50,7 +50,7 @@ pub fn parse(bytes: &[u8]) -> Result<Mesh, String> {
 fn parse_binary(body: &[u8], n: usize, b: &mut Builder) {
     b.reserve(n);
     let f = |s: &[u8], i: usize| f32::from_le_bytes(s[i * 4..i * 4 + 4].try_into().unwrap());
-    for rec in body.as_chunks::<50>().0.iter().take(n) {
+    for rec in body.chunks_exact(50).take(n) {
         let v = |k: usize| Vec3::new(f(rec, 3 + k * 3), f(rec, 4 + k * 3), f(rec, 5 + k * 3));
         let file_normal = Vec3::new(f(rec, 0), f(rec, 1), f(rec, 2));
         b.push(v(0), v(1), v(2), file_normal);

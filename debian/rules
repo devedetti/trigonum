@@ -1,0 +1,18 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export CARGO_HOME = $(CURDIR)/debian/cargo-home
+export CARGO_NET_OFFLINE = true
+
+%:
+	dh $@ --buildsystem=meson
+
+execute_before_dh_auto_configure:
+	mkdir -p $(CARGO_HOME)
+	printf '[source.crates-io]\nreplace-with = "vendored-sources"\n\n[source.vendored-sources]\ndirectory = "%s"\n' "$(CURDIR)/vendor" > $(CARGO_HOME)/config.toml
+
+execute_after_dh_auto_clean:
+	rm -rf $(CARGO_HOME)
+
+override_dh_clean:
+	dh_clean -Xvendor/

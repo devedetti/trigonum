@@ -50,9 +50,15 @@ Que vuelvan las apps de escritorio.
 | Panel de información | `I` o `F9` |
 | Abrir / Recargar | `Ctrl+O` / `Ctrl+R` o `F5` |
 
+## Instalación
+
+- **Arch Linux:** [`trigonum`](https://aur.archlinux.org/packages/trigonum) en el AUR.
+- **Debian 13, Ubuntu 26.04, Fedora y openSUSE Tumbleweed:** repositorios en el
+  [Open Build Service](https://software.opensuse.org/download.html?project=home%3Anachopro&package=trigonum), con las instrucciones para agregarlos.
+
 ## Compilación
 
-Requisitos: Rust ≥ 1.88 (cargo), Meson ≥ 1.1, GTK ≥ 4.12 y gettext.
+Requisitos: Rust ≥ 1.85 (cargo), Meson ≥ 1.1, GTK ≥ 4.12 y gettext.
 
 ```sh
 meson setup build --buildtype=release
@@ -70,24 +76,22 @@ meson compile -C build
 TRIGONUM_LOCALEDIR=build/po LANGUAGE=es build/trigonum modelo.stl
 ```
 
-## Paquete para Arch Linux
+## Paquetes y CI
 
-`packaging/arch/PKGBUILD` sigue las guías de empaquetado de Rust de Arch.
+Los archivos de empaquetado están en `debian/`, `packaging/rpm/trigonum.spec` y
+`packaging/arch/PKGBUILD`. El tarball de cada versión incluye los crates en `vendor/`,
+para que Debian, Ubuntu, Fedora y openSUSE puedan compilar sin red.
 
-Para probarlo localmente, con el código de tu copia en vez del tag publicado:
+Cada PR en Forgejo compila, testea e instala el paquete real en Debian 13, Ubuntu 26.04,
+Arch, Fedora y openSUSE Tumbleweed (`.forgejo/workflows/ci.yml`). Para correr lo mismo
+localmente con Docker:
 
 ```sh
-build-aux/local-tarball.sh
-cd packaging/arch
-makepkg -si -p PKGBUILD.local
+build-aux/ci/run-local.sh all        # o: debian, ubuntu, arch, fedora, opensuse
 ```
 
-Para publicarlo en AUR:
-
-1. Crear el tag de la versión y subirlo a Forgejo: `git tag v0.1.1 && git push --tags`.
-2. Esperar a que el espejo lo copie a GitHub, porque el PKGBUILD baja el tarball de ahí.
-3. En `packaging/arch`: `updpkgsums` y después `makepkg --printsrcinfo > .SRCINFO`.
-4. Clonar `ssh://aur@aur.archlinux.org/trigonum.git`, copiar `PKGBUILD` y `.SRCINFO`, hacer commit y push.
+Los paquetes quedan en `ci-out/`. La versión mínima de Rust es 1.85, la de Debian 13:
+clippy avisa si se usa algo más nuevo.
 
 ## Traducciones
 
@@ -101,9 +105,13 @@ Después de cambiar textos en el código: `meson compile -C build trigonum-updat
 
 ## Publicar una versión nueva
 
-Subir la versión en `Cargo.toml` **y** en `meson.build` (el build falla si no coinciden),
-agregar una entrada `<release>` en `data/trigonum.metainfo.xml.in.in`, actualizar
-`pkgver` en el PKGBUILD y anotar los cambios en `CHANGELOG.md`.
+1. Anotar los cambios en la sección `[Unreleased]` de `CHANGELOG.md`.
+2. Ejecutar `build-aux/bump-version.sh X.Y.Z` en el mismo PR. Cambia la versión en todos
+   los archivos que la repiten y cierra la sección del CHANGELOG.
+3. Mergear el PR a `main`. El workflow `release.yml` crea el tag `vX.Y.Z`, sube el paquete
+   fuente al Open Build Service y actualiza el AUR.
+
+Un merge sin cambio de versión no publica nada.
 
 ## Licencia
 

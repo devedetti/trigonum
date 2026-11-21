@@ -1,0 +1,81 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Al mergear a main: si la versión de Cargo.toml todavía no tiene tag, la publica.
+# Crea el tag, sube el paquete fuente a OBS (Debian, Ubuntu, Fedora, openSUSE) y actualiza el AUR.
+# Necesita: variable OBS_USER y secretos OBS_PASSWORD y AUR_SSH_KEY (Ajustes → Actions).
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    name: ¿Hay versión nueva?
+    runs-on: docker
+    container:
+      image: node:22-bookworm
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+      release: ${{ steps.v.outputs.release }}
+    steps:
+      - uses: https://code.forgejo.org/actions/checkout@v4
+      - name: Versiones coherentes
+        run: build-aux/ci/check-version.sh
+      - id: v
+        name: Buscar el tag
+        run: |
+          v=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -n1)
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          if git ls-remote --exit-code --tags origin "refs/tags/v$v" >/dev/null; then
+            echo "release=false" >> "$GITHUB_OUTPUT"
+            echo "v$v ya existe: no se publica nada."
+          else
+            echo "release=true" >> "$GITHUB_OUTPUT"
+            echo "Se publica la v$v."
+          fi
+
+  tag:
+    name: Tag v${{ needs.check.outputs.version }}
+    needs: check
+    if: needs.check.outputs.release == 'true'
+    runs-on: docker
+    container:
+      image: node:22-bookworm
+    steps:
+      - uses: https://code.forgejo.org/actions/checkout@v4
+      - name: Crear y subir el tag
+        run: |
+          v=${{ needs.check.outputs.version }}
+          git -c user.name=nachopro -c user.email=tech@local.net.ar tag -a "v$v" -m "Trigonum $v"
+          git push origin "v$v"
+
+  obs:
+    name: OBS
+    needs: [check, tag]
+    runs-on: docker
+    container:
+      image: debian:trixie
+    steps:
+      - name: Herramientas
+        run: apt-get update -qq && apt-get install -y -qq --no-install-recommends nodejs git ca-certificates
+      - uses: https://code.forgejo.org/actions/checkout@v4
+      - name: Subir el paquete fuente a OBS
+        env:
+          OBS_USER: ${{ vars.OBS_USER }}
+          OBS_PASSWORD: ${{ secrets.OBS_PASSWORD }}
+        run: build-aux/ci/release-obs.sh
+
+  aur:
+    name: AUR
+    needs: [check, tag]
+    runs-on: docker
+    container:
+      image: archlinux:latest
+    steps:
+      - name: Herramientas
+        run: pacman -Syu --noconfirm --needed -q nodejs git
+      - uses: https://code.forgejo.org/actions/checkout@v4
+      - name: Actualizar el AUR
+        env:
+          AUR_SSH_KEY: ${{ secrets.AUR_SSH_KEY }}
+        run: build-aux/ci/release-aur.sh

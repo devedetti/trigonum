@@ -1,0 +1,33 @@
+Source: trigonum
+Section: graphics
+Priority: optional
+Maintainer: nachopro <tech@local.net.ar>
+Build-Depends:
+ debhelper-compat (= 13),
+ meson (>= 1.1),
+ cargo,
+ rustc (>= 1.85),
+ libgtk-4-dev (>= 4.12),
+ gettext,
+ pkgconf,
+ appstream,
+ desktop-file-utils,
+Standards-Version: 4.7.2
+Homepage: https://github.com/devedetti/trigonum
+Vcs-Browser: https://git.local.net.ar/nachopro/trigonum
+Vcs-Git: https://git.local.net.ar/nachopro/trigonum.git
+Rules-Requires-Root: no
+
+Package: trigonum
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+ libepoxy0,
+Description: lightweight viewer for STL 3D models
+ Trigonum is a fast, lightweight viewer for STL files, the format used by
+ 3D printers and most CAD programs. It opens binary and ASCII files with
+ millions of triangles, shows dimensions, volume and surface area, and
+ reloads the model automatically when the file changes on disk.
+ .
+ It has a classic desktop interface with a menu bar, toolbar and status bar.
