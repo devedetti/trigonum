@@ -3,7 +3,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: trigonum 0.1.2\n"
+"Project-Id-Version: trigonum 0.2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/devedetti/trigonum/issues\n"
 "POT-Creation-Date: 2026-11-21 14:23-0300\n"
 "PO-Revision-Date: 2026-11-14 00:00-0300\n"

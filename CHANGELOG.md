@@ -7,6 +7,8 @@ proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-21
+
 ### Agregado
 
 - Pestañas: cada archivo se abre en su propia pestaña en vez de reemplazar al anterior, con

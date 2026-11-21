@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 pkgname=trigonum
-pkgver=0.1.2
+pkgver=0.2.0
 pkgrel=1
 pkgdesc='Lightweight viewer for STL 3D models'
 arch=(x86_64 aarch64)
