@@ -21,6 +21,7 @@ makedepends=(
   cargo
   meson
 )
+options=(!debug)
 checkdepends=(
   appstream
   desktop-file-utils

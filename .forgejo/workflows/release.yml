@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-# Al mergear a main: si la versión de Cargo.toml todavía no tiene tag, la publica.
-# Crea el tag, sube el paquete fuente a OBS (Debian, Ubuntu, Fedora, openSUSE) y actualiza el AUR.
+# Al mergear a main (que solo acepta ramas release/X.Y.Z): si la versión de Cargo.toml todavía
+# no tiene tag, la publica. Crea el tag, sube el paquete fuente a OBS (Debian, Ubuntu, Fedora,
+# openSUSE) y actualiza el AUR. Si quedó una rama next que no incluye la versión publicada, avisa.
 # Necesita: variable OBS_USER y secretos OBS_PASSWORD y AUR_SSH_KEY (Ajustes → Actions),
 # y las imágenes trigonum-ci/debian y trigonum-ci/arch en el runner (build-aux/ci/build-images.sh).
 name: Release
@@ -76,3 +77,26 @@ jobs:
         env:
           AUR_SSH_KEY: ${{ secrets.AUR_SSH_KEY }}
         run: build-aux/ci/release-aur.sh
+
+  next-al-dia:
+    name: ¿Quedó una next vieja?
+    needs: [check, tag]
+    runs-on: docker
+    container:
+      image: node:22-bookworm
+    steps:
+      - uses: https://code.forgejo.org/actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Revisar next
+        run: |
+          git config --global --add safe.directory "$PWD"
+          v=${{ needs.check.outputs.version }}
+          git fetch -q origin --tags
+          if ! git rev-parse -q --verify origin/next >/dev/null; then
+            echo "No hay rama next: el próximo ciclo arranca con git switch -c next origin/main."
+          elif git merge-base --is-ancestor "v$v" origin/next; then
+            echo "next ya incluye v$v."
+          else
+            echo "::warning::Existe una rama next que no incluye v$v. Si es de un ciclo nuevo, traele main (git merge origin/main); si quedó vieja, borrala y creala de nuevo desde main."
+          fi

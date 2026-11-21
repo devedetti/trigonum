@@ -53,9 +53,65 @@ Bring back desktop apps.
 
 ## Installing
 
-- **Arch Linux:** [`trigonum`](https://aur.archlinux.org/packages/trigonum) on the AUR.
-- **Debian 13, Ubuntu 26.04, Fedora and openSUSE Tumbleweed:** repositories on the
-  [Open Build Service](https://software.opensuse.org/download.html?project=home%3Anachopro&package=trigonum), with instructions to add them.
+The easiest way on Debian, Ubuntu, Fedora and openSUSE is the
+[download page](https://software.opensuse.org/download.html?project=home%3Anachopro&package=trigonum): pick your distro and it shows how to add the repository,
+or offers a one-click install. The same steps for each distro are below.
+
+### Arch Linux and derivatives
+
+Available on the AUR as [`trigonum`](https://aur.archlinux.org/packages/trigonum):
+
+```sh
+yay -S trigonum        # or: paru -S trigonum
+```
+
+Without an AUR helper:
+
+```sh
+git clone https://aur.archlinux.org/trigonum.git
+cd trigonum
+makepkg -si
+```
+
+### Debian 13 (trixie)
+
+```sh
+sudo install -d /etc/apt/keyrings
+curl -fsSL https://download.opensuse.org/repositories/home:/nachopro/Debian_13/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/trigonum.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/trigonum.gpg] https://download.opensuse.org/repositories/home:/nachopro/Debian_13/ /' | sudo tee /etc/apt/sources.list.d/trigonum.list
+sudo apt update
+sudo apt install trigonum
+```
+
+### Ubuntu 26.04
+
+```sh
+sudo install -d /etc/apt/keyrings
+curl -fsSL https://download.opensuse.org/repositories/home:/nachopro/xUbuntu_26.04/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/trigonum.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/trigonum.gpg] https://download.opensuse.org/repositories/home:/nachopro/xUbuntu_26.04/ /' | sudo tee /etc/apt/sources.list.d/trigonum.list
+sudo apt update
+sudo apt install trigonum
+```
+
+### Fedora 44 and 45
+
+```sh
+sudo dnf config-manager addrepo --from-repofile=https://download.opensuse.org/repositories/home:/nachopro/Fedora_$(rpm -E %fedora)/home:nachopro.repo
+sudo dnf install trigonum
+```
+
+### openSUSE Tumbleweed
+
+```sh
+sudo zypper addrepo https://download.opensuse.org/repositories/home:/nachopro/openSUSE_Tumbleweed/home:nachopro.repo
+sudo zypper refresh
+sudo zypper install trigonum
+```
+
+`zypper refresh` asks you to confirm the repository key: answer `a` (always trust).
+
+Once the repository is added, new versions arrive with regular system updates.
+Packages are built on the Open Build Service, in the `home:nachopro` project.
 
 ## Building
 
@@ -82,9 +138,9 @@ Packaging lives in `debian/`, `packaging/rpm/trigonum.spec` and `packaging/arch/
 Each release tarball ships the crates in `vendor/`, so Debian, Ubuntu, Fedora and openSUSE
 can build offline.
 
-Every PR on Forgejo builds, tests and installs the real package on Debian 13, Ubuntu 26.04,
-Arch, Fedora and openSUSE Tumbleweed (`.forgejo/workflows/ci.yml`). To run the same locally
-with Docker:
+The full CI (`.forgejo/workflows/ci.yml`) builds, tests and installs the real package on
+Debian 13, Ubuntu 26.04, Arch, Fedora and openSUSE Tumbleweed. It runs on every RC pull
+request and on demand (see [CONTRIBUTING.md](CONTRIBUTING.md)). To run the same locally with Docker:
 
 ```sh
 build-aux/ci/run-local.sh all        # or: debian, ubuntu, arch, fedora, opensuse
@@ -94,9 +150,11 @@ Packages end up in `ci-out/`. The minimum Rust version is 1.85, the one in Debia
 clippy warns if anything newer is used.
 
 CI uses its own images (`trigonum-ci/debian`, `ubuntu`, `arch`, `fedora` and `opensuse`)
-with everything preinstalled. They are built on the runner host with
+with everything preinstalled: tools, dependencies, the crates from `Cargo.lock` and, in the
+Arch one, clippy's dependencies already compiled. They are built on the runner host with
 `build-aux/ci/build-images.sh`, and `build-aux/ci/host/` ships a systemd timer that rebuilds
-them weekly and cleans up what jobs leave behind.
+them weekly and cleans up what jobs leave behind. If you change dependencies, CI downloads
+the new ones until the next rebuild; run `build-images.sh` by hand to skip the wait.
 
 ## Translations
 
@@ -108,15 +166,12 @@ Strings are extracted with gettext (`po/`). To add a language:
 
 After changing strings in the code: `meson compile -C build trigonum-update-po`.
 
-## Releasing a new version
+## Contributing and releasing
 
-1. Record the changes under `[Unreleased]` in `CHANGELOG.md` (written in Spanish).
-2. Run `build-aux/bump-version.sh X.Y.Z` in the same PR. It updates the version in every file
-   that repeats it and closes the CHANGELOG section.
-3. Merge the PR into `main`. The `release.yml` workflow creates the `vX.Y.Z` tag, uploads the
-   source package to the Open Build Service and updates the AUR.
-
-A merge without a version change publishes nothing.
+Features go through pull requests into a temporary `next` branch, which is renamed to
+`release/X.Y.Z` when a version ships. Its PR into `main` is the RC: it runs the full CI on the
+5 distros and, once merged, the version is published. Details are in
+[CONTRIBUTING.md](CONTRIBUTING.md) (in Spanish).
 
 ## License
 

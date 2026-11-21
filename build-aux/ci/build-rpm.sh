@@ -48,4 +48,4 @@ check_binary
 check_translations "$(rpm -qlp "$top"/RPMS/*/trigonum-"$v"-*.rpm)"
 out="$out/$(distro)"
 mkdir -p "$out"
-cp "$top"/RPMS/*/*.rpm "$top"/SRPMS/*.rpm "$out/"
+cp "$top"/RPMS/*/*.rpm "$out/"

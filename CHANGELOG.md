@@ -7,8 +7,31 @@ proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+### Agregado
+
+- Instrucciones de instalación para cada distro en los READMEs.
+- Flujo de ramas feature → `next` → `release/X.Y.Z` → `main`. `next` es temporal: sale de
+  `main` en cada ciclo y se renombra a `release/X.Y.Z` para el RC, así no queda ninguna rama
+  de integración desincronizada. `main` solo acepta ramas `release/X.Y.Z`, y son las únicas
+  que pueden subir la versión (`build-aux/ci/check-branch.sh`). Al publicar, el release avisa
+  si quedó una `next` que no incluye la versión nueva.
+- `CONTRIBUTING.md`: el flujo de ramas, las reglas del CI y cómo publicar una versión.
+- El CI completo, con los paquetes de las 5 distros como artefactos para probar, corre en el
+  PR de cada RC (`release/X.Y.Z` → `main`) y a demanda desde Actions en cualquier rama. En el
+  resto de los PR solo corren las reglas de versión y clippy.
+
+### Cambiado
+
+- `build-aux/bump-version.sh` solo funciona en la rama `release/<versión nueva>`.
+
 ### Corregido
 
+- El PKGBUILD ya no genera un paquete `trigonum-debug` vacío (`options=(!debug)`): el build
+  en release no incluye símbolos de depuración.
+- El CI ya no usa la caché de Actions: Forgejo la separa por PR, así que cada PR nuevo
+  arrancaba vacío. Ahora las imágenes `trigonum-ci/*` traen los crates del `Cargo.lock`, y la
+  de Arch también las dependencias de clippy ya compiladas. `dist-tarball.sh` usa los crates
+  que ya están y solo baja de internet lo que falta.
 - Debian 13 en OBS: se agrega `packaging/obs/prjconf` con `Prefer: libjpeg62-turbo-dev`.
   `libjpeg-dev` lo proveen dos paquetes y OBS no elegía solo, así que marcaba el build
   como irresolvable.

@@ -1,7 +1,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-# Cada PR: compila, testea e instala el paquete real en todas las distros soportadas.
-# Usa las imágenes trigonum-ci/* del runner (build-aux/ci/build-images.sh), que ya traen
-# las herramientas y dependencias. Lo mismo se corre localmente con build-aux/ci/run-local.sh.
+# Flujo de ramas: feature → next → release/X.Y.Z → main (ver CONTRIBUTING.md).
+# - PR de una feature (a next) o de un arreglo (a release/X.Y.Z): reglas de versión y clippy.
+# - PR de release/X.Y.Z a main (el RC): CI completo en las 5 distros, con los paquetes como
+#   artefactos para probar.
+# - Corrida manual (Actions → CI → Run workflow) en cualquier rama: CI completo con artefactos.
+# Los jobs que no aplican terminan en verde sin compilar, así la protección CI / * siempre
+# encuentra sus checks. Usa las imágenes trigonum-ci/* del runner (build-aux/ci/build-images.sh).
 name: CI
 
 on:
@@ -12,51 +16,87 @@ env:
   CARGO_HOME: /root/.cargo
 
 jobs:
+  reglas:
+    name: Reglas de ramas y versión
+    runs-on: docker
+    container:
+      image: trigonum-ci/arch:latest
+    outputs:
+      completo: ${{ steps.reglas.outputs.completo }}
+    steps:
+      - uses: https://code.forgejo.org/actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: reglas
+        name: Reglas del flujo de ramas
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          git config --global --add safe.directory "$PWD"
+          build-aux/ci/check-branch.sh >> "$GITHUB_OUTPUT"
+      - name: Versiones coherentes
+        run: build-aux/ci/check-version.sh
+
   arch:
     name: arch + clippy
+    needs: reglas
     runs-on: docker
     container:
       image: trigonum-ci/arch:latest
     steps:
       - uses: https://code.forgejo.org/actions/checkout@v4
-      - uses: https://code.forgejo.org/actions/cache@v4
-        with:
-          path: |
-            /root/.cargo/registry/index
-            /root/.cargo/registry/cache
-          key: cargo-${{ hashFiles('Cargo.lock') }}
-      - uses: https://code.forgejo.org/actions/cache@v4
-        with:
-          path: target
-          key: clippy-target-${{ hashFiles('Cargo.lock') }}-${{ github.sha }}
-          restore-keys: clippy-target-${{ hashFiles('Cargo.lock') }}-
-      - name: Versiones coherentes
-        run: build-aux/ci/check-version.sh
       - name: clippy (avisa si se usa algo más nuevo que Rust 1.85)
-        run: cargo clippy --locked --all-targets -- -D warnings
+        run: |
+          cargo fetch --locked --offline 2>/dev/null || cargo fetch --locked
+          CARGO_TARGET_DIR="${CLIPPY_TARGET_DIR:-target}" cargo clippy --locked --offline --all-targets -- -D warnings
       - name: Compilar, testear e instalar el paquete
+        if: needs.reglas.outputs.completo == 'true'
         run: build-aux/ci/build-arch.sh
+      - name: Versión del paquete
+        id: v
+        if: needs.reglas.outputs.completo == 'true'
+        run: echo "version=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -n1)" >> "$GITHUB_OUTPUT"
+      - name: Subir el paquete para probar
+        if: needs.reglas.outputs.completo == 'true'
+        uses: https://code.forgejo.org/actions/upload-artifact@v3
+        with:
+          name: trigonum-${{ steps.v.outputs.version }}-arch
+          path: ci-out/*/*.pkg.tar.zst
+          retention-days: 30
 
   build:
     name: ${{ matrix.distro }}
+    needs: reglas
     runs-on: docker
     strategy:
       fail-fast: false
       matrix:
         include:
-          - { distro: debian, script: build-deb.sh }
-          - { distro: ubuntu, script: build-deb.sh }
-          - { distro: fedora, script: build-rpm.sh }
-          - { distro: opensuse, script: build-rpm.sh }
+          - { distro: debian, script: build-deb.sh, files: "ci-out/*/*.deb" }
+          - { distro: ubuntu, script: build-deb.sh, files: "ci-out/*/*.deb" }
+          - { distro: fedora, script: build-rpm.sh, files: "ci-out/*/*.rpm" }
+          - { distro: opensuse, script: build-rpm.sh, files: "ci-out/*/*.rpm" }
     container:
       image: trigonum-ci/${{ matrix.distro }}:latest
     steps:
+      - name: Sin paquetes en este PR
+        if: needs.reglas.outputs.completo != 'true'
+        run: echo "No es un RC ni una corrida manual; no se arman paquetes. Para probarlos, corré el CI a mano desde Actions."
       - uses: https://code.forgejo.org/actions/checkout@v4
-      - uses: https://code.forgejo.org/actions/cache@v4
-        with:
-          path: |
-            /root/.cargo/registry/index
-            /root/.cargo/registry/cache
-          key: cargo-${{ hashFiles('Cargo.lock') }}
+        if: needs.reglas.outputs.completo == 'true'
       - name: Compilar, testear e instalar el paquete
+        if: needs.reglas.outputs.completo == 'true'
         run: build-aux/ci/${{ matrix.script }}
+      - name: Versión del paquete
+        id: v
+        if: needs.reglas.outputs.completo == 'true'
+        run: echo "version=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -n1)" >> "$GITHUB_OUTPUT"
+      - name: Subir el paquete para probar
+        if: needs.reglas.outputs.completo == 'true'
+        uses: https://code.forgejo.org/actions/upload-artifact@v3
+        with:
+          name: trigonum-${{ steps.v.outputs.version }}-${{ matrix.distro }}
+          path: ${{ matrix.files }}
+          retention-days: 30

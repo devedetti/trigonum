@@ -8,6 +8,13 @@ cd "$root"
 
 new=${1:-}
 echo "$new" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$' || { echo "Uso: $0 X.Y.Z" >&2; exit 2; }
+branch=$(git branch --show-current 2>/dev/null || true)
+if [ "$branch" != "release/$new" ]; then
+  echo "La versión solo se sube en la rama release/$new (estás en '${branch:-ninguna}')." >&2
+  echo "Renombrá next en Forgejo (Ramas → ✏️ en next → release/$new) y después:" >&2
+  echo "  git fetch -p origin && git switch release/$new" >&2
+  exit 1
+fi
 old=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -n1)
 [ "$new" != "$old" ] || { echo "Ya está en $new" >&2; exit 1; }
 today=$(date +%F)
@@ -58,4 +65,4 @@ mv "$tmp" CHANGELOG.md
 
 "$root/build-aux/ci/check-version.sh"
 echo
-echo "Listo: $old → $new. Revisá el diff, commiteá y abrí el PR."
+echo "Listo: $old → $new. Revisá el diff, commiteá, pusheá y abrí el PR de release/$new hacia main (el RC)."

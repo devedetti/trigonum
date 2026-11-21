@@ -30,7 +30,8 @@ tar -C "$root" \
   --exclude=./.claude \
   -cf - . | tar -C "$stage/$name" -xf -
 
-cargo vendor --quiet --locked --manifest-path "$stage/$name/Cargo.toml" "$stage/$name/vendor" >/dev/null
+vendor() { cargo vendor --quiet --locked "$@" --manifest-path "$stage/$name/Cargo.toml" "$stage/$name/vendor" >/dev/null; }
+vendor --offline 2>/dev/null || { rm -rf "$stage/$name/vendor"; vendor; }
 
 tar -C "$stage" --sort=name --owner=0 --group=0 --numeric-owner \
   --mtime="@${SOURCE_DATE_EPOCH:-$(date +%s)}" \

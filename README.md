@@ -52,9 +52,65 @@ Que vuelvan las apps de escritorio.
 
 ## Instalación
 
-- **Arch Linux:** [`trigonum`](https://aur.archlinux.org/packages/trigonum) en el AUR.
-- **Debian 13, Ubuntu 26.04, Fedora y openSUSE Tumbleweed:** repositorios en el
-  [Open Build Service](https://software.opensuse.org/download.html?project=home%3Anachopro&package=trigonum), con las instrucciones para agregarlos.
+La forma más simple para Debian, Ubuntu, Fedora y openSUSE es la
+[página de descarga](https://software.opensuse.org/download.html?project=home%3Anachopro&package=trigonum): elegís tu distro y te muestra cómo agregar el repositorio,
+o te ofrece la instalación en un clic. Abajo están los mismos pasos para cada distro.
+
+### Arch Linux y derivadas
+
+Está en el AUR como [`trigonum`](https://aur.archlinux.org/packages/trigonum):
+
+```sh
+yay -S trigonum        # o: paru -S trigonum
+```
+
+Sin un ayudante de AUR:
+
+```sh
+git clone https://aur.archlinux.org/trigonum.git
+cd trigonum
+makepkg -si
+```
+
+### Debian 13 (trixie)
+
+```sh
+sudo install -d /etc/apt/keyrings
+curl -fsSL https://download.opensuse.org/repositories/home:/nachopro/Debian_13/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/trigonum.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/trigonum.gpg] https://download.opensuse.org/repositories/home:/nachopro/Debian_13/ /' | sudo tee /etc/apt/sources.list.d/trigonum.list
+sudo apt update
+sudo apt install trigonum
+```
+
+### Ubuntu 26.04
+
+```sh
+sudo install -d /etc/apt/keyrings
+curl -fsSL https://download.opensuse.org/repositories/home:/nachopro/xUbuntu_26.04/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/trigonum.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/trigonum.gpg] https://download.opensuse.org/repositories/home:/nachopro/xUbuntu_26.04/ /' | sudo tee /etc/apt/sources.list.d/trigonum.list
+sudo apt update
+sudo apt install trigonum
+```
+
+### Fedora 44 y 45
+
+```sh
+sudo dnf config-manager addrepo --from-repofile=https://download.opensuse.org/repositories/home:/nachopro/Fedora_$(rpm -E %fedora)/home:nachopro.repo
+sudo dnf install trigonum
+```
+
+### openSUSE Tumbleweed
+
+```sh
+sudo zypper addrepo https://download.opensuse.org/repositories/home:/nachopro/openSUSE_Tumbleweed/home:nachopro.repo
+sudo zypper refresh
+sudo zypper install trigonum
+```
+
+`zypper refresh` pide confirmar la clave del repositorio: respondé `a` (aceptar siempre).
+
+Con el repositorio agregado, las versiones nuevas llegan con las actualizaciones normales del sistema.
+Los paquetes se compilan en el Open Build Service, en el proyecto `home:nachopro`.
 
 ## Compilación
 
@@ -82,9 +138,9 @@ Los archivos de empaquetado están en `debian/`, `packaging/rpm/trigonum.spec` y
 `packaging/arch/PKGBUILD`. El tarball de cada versión incluye los crates en `vendor/`,
 para que Debian, Ubuntu, Fedora y openSUSE puedan compilar sin red.
 
-Cada PR en Forgejo compila, testea e instala el paquete real en Debian 13, Ubuntu 26.04,
-Arch, Fedora y openSUSE Tumbleweed (`.forgejo/workflows/ci.yml`). Para correr lo mismo
-localmente con Docker:
+El CI completo (`.forgejo/workflows/ci.yml`) compila, testea e instala el paquete real en
+Debian 13, Ubuntu 26.04, Arch, Fedora y openSUSE Tumbleweed. Corre en el PR de cada RC y a
+demanda (ver [CONTRIBUTING.md](CONTRIBUTING.md)). Para correr lo mismo localmente con Docker:
 
 ```sh
 build-aux/ci/run-local.sh all        # o: debian, ubuntu, arch, fedora, opensuse
@@ -94,9 +150,11 @@ Los paquetes quedan en `ci-out/`. La versión mínima de Rust es 1.85, la de Deb
 clippy avisa si se usa algo más nuevo.
 
 El CI usa imágenes propias (`trigonum-ci/debian`, `ubuntu`, `arch`, `fedora` y `opensuse`)
-con todo preinstalado. Se construyen en el servidor del runner con
+con todo preinstalado: herramientas, dependencias, los crates del `Cargo.lock` y, en la de
+Arch, las dependencias de clippy ya compiladas. Se construyen en el servidor del runner con
 `build-aux/ci/build-images.sh`, y `build-aux/ci/host/` trae un timer de systemd que las
-reconstruye cada semana y limpia lo que dejan los jobs.
+reconstruye cada semana y limpia lo que dejan los jobs. Si cambiás las dependencias, el CI
+baja lo nuevo hasta la próxima reconstrucción; para no esperar, corré `build-images.sh` a mano.
 
 ## Traducciones
 
@@ -108,15 +166,11 @@ Los textos se extraen con gettext (carpeta `po/`). Para agregar un idioma:
 
 Después de cambiar textos en el código: `meson compile -C build trigonum-update-po`.
 
-## Publicar una versión nueva
+## Contribuir y publicar versiones
 
-1. Anotar los cambios en la sección `[Unreleased]` de `CHANGELOG.md`.
-2. Ejecutar `build-aux/bump-version.sh X.Y.Z` en el mismo PR. Cambia la versión en todos
-   los archivos que la repiten y cierra la sección del CHANGELOG.
-3. Mergear el PR a `main`. El workflow `release.yml` crea el tag `vX.Y.Z`, sube el paquete
-   fuente al Open Build Service y actualiza el AUR.
-
-Un merge sin cambio de versión no publica nada.
+Las features van por PR a una rama temporal `next`, que al sacar una versión se renombra a
+`release/X.Y.Z`. Su PR hacia `main` es el RC: corre el CI completo en las 5 distros y, al
+mergearlo, se publica. El detalle está en [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Licencia
 
