@@ -3,7 +3,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: trigonum 0.1.0\n"
+"Project-Id-Version: trigonum 0.1.1\n"
 "Report-Msgid-Bugs-To: https://github.com/devedetti/trigonum/issues\n"
 "PO-Revision-Date: 2026-11-14 00:00-0300\n"
 "Last-Translator: nachopro\n"
@@ -55,7 +55,11 @@ msgstr "Recarga el modelo automáticamente cuando el archivo cambia en el disco"
 msgid "Classic interface with menu bar, toolbar and status bar"
 msgstr "Interfaz clásica con barra de menús, barra de herramientas y barra de estado"
 
-#: data/trigonum.metainfo.xml.in.in:48
+#: data/trigonum.metainfo.xml.in.in:49
+msgid "Fixed a crash on startup."
+msgstr "Se corrigió un cierre inesperado al iniciar."
+
+#: data/trigonum.metainfo.xml.in.in:54
 msgid "First release."
 msgstr "Primera versión."
 

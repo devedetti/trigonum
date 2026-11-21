@@ -66,7 +66,7 @@ makepkg -si -p PKGBUILD.local
 
 Para publicarlo en AUR:
 
-1. Crear el tag de la versión y subirlo a Forgejo: `git tag v0.1.0 && git push --tags`.
+1. Crear el tag de la versión y subirlo a Forgejo: `git tag v0.1.1 && git push --tags`.
 2. Esperar a que el espejo lo copie a GitHub, porque el PKGBUILD baja el tarball de ahí.
 3. En `packaging/arch`: `updpkgsums` y después `makepkg --printsrcinfo > .SRCINFO`.
 4. Clonar `ssh://aur@aur.archlinux.org/trigonum.git`, copiar `PKGBUILD` y `.SRCINFO`, hacer commit y push.
@@ -84,8 +84,8 @@ Después de cambiar textos en el código: `meson compile -C build trigonum-updat
 ## Publicar una versión nueva
 
 Subir la versión en `Cargo.toml` **y** en `meson.build` (el build falla si no coinciden),
-agregar una entrada `<release>` en `data/trigonum.metainfo.xml.in.in` y actualizar
-`pkgver` en el PKGBUILD.
+agregar una entrada `<release>` en `data/trigonum.metainfo.xml.in.in`, actualizar
+`pkgver` en el PKGBUILD y anotar los cambios en `CHANGELOG.md`.
 
 ## Licencia
 

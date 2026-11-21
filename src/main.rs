@@ -24,7 +24,6 @@ fn init_i18n() {
 fn main() -> glib::ExitCode {
     init_i18n();
     glib::set_application_name("Trigonum");
-    gtk::Window::set_default_icon_name(config::APP_ID);
 
     let app = gtk::Application::builder()
         .application_id(config::APP_ID)
@@ -32,6 +31,8 @@ fn main() -> glib::ExitCode {
         .build();
 
     app.connect_startup(|app| {
+        gtk::Window::set_default_icon_name(config::APP_ID);
+
         let quit = gio::SimpleAction::new("quit", None);
         let a = app.downgrade();
         quit.connect_activate(move |_, _| {

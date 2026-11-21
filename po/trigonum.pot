@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: trigonum 0.1.0\n"
+"Project-Id-Version: trigonum 0.1.1\n"
 "Report-Msgid-Bugs-To: https://github.com/devedetti/trigonum/issues\n"
 "POT-Creation-Date: 2026-11-14 18:07-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -61,7 +61,11 @@ msgstr ""
 msgid "Classic interface with menu bar, toolbar and status bar"
 msgstr ""
 
-#: data/trigonum.metainfo.xml.in.in:48
+#: data/trigonum.metainfo.xml.in.in:49
+msgid "Fixed a crash on startup."
+msgstr ""
+
+#: data/trigonum.metainfo.xml.in.in:54
 msgid "First release."
 msgstr ""
 
