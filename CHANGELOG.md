@@ -39,6 +39,10 @@ proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
   de los países de habla portuguesa (gettext cae de `pt_PT` a `pt`, pero nunca a `pt_BR`).
 - Archivo → Cerrar pasa a ser Cerrar pestaña (`Ctrl+W`, o clic del medio en la pestaña).
   Antes cerraba la ventana, que con una sola ventana era lo mismo que Salir.
+- Ayuda → Acerca de Trigonum explica para qué está hecho el programa y en qué distros está, y
+  su enlace principal es el repositorio en git.local.net.ar. En la pestaña Créditos están los enlaces
+  a los binarios para cada distro (openSUSE repo) y a GitHub para issues y PRs, y el autor figura
+  como "nachopro, desde Argentina".
 - `build-aux/bump-version.sh` solo funciona en la rama `release/<versión nueva>`.
 
 ### Corregido

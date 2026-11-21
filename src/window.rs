@@ -303,17 +303,30 @@ impl Viewer {
         simple("about", |v| {
             // TRANSLATORS: replace with your name(s), one per line, e.g. "Jane Doe <jane@example.com>".
             let credits = gettext("translator-credits");
+            let comments = format!(
+                "{}\n\n{}",
+                gettext("Lightweight viewer for STL 3D models"),
+                gettext(
+                    "Made so you don't have to rely on JavaScript or intrusive websites: simple and easy to \
+                     use. Available for Debian, Ubuntu, Fedora, openSUSE and Arch.",
+                ),
+            );
             let dialog = gtk::AboutDialog::builder()
                 .transient_for(&v.window)
                 .modal(true)
                 .program_name("Trigonum")
                 .logo_icon_name(config::APP_ID)
                 .version(config::VERSION)
-                .comments(gettext("Lightweight viewer for STL 3D models"))
-                .website(config::WEBSITE)
-                .authors(["nachopro"])
+                .comments(comments)
+                .website(config::REPOSITORY)
+                .website_label(gettext("Repository"))
+                // TRANSLATORS: credits page, under "Created by".
+                .authors([gettext("nachopro, from Argentina")])
                 .license_type(gtk::License::Gpl30)
                 .build();
+            let entry = |text: &str, url: &str| format!("{text} {}", url.replace('&', "&amp;"));
+            dialog.add_credit_section(&gettext("Binaries for distros"), &[&entry("openSUSE repo", config::DOWNLOADS)]);
+            dialog.add_credit_section(&gettext("Issues and PRs"), &[&entry("GitHub", config::WEBSITE)]);
             if credits != "translator-credits" {
                 dialog.set_translator_credits(Some(&credits));
             }

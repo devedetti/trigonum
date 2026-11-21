@@ -13,6 +13,10 @@ const fn or(v: Option<&'static str>, default: &'static str) -> &'static str {
 
 pub const APP_ID: &str = or(option_env!("TRIGONUM_APP_ID"), "ar.net.local.Trigonum");
 pub const WEBSITE: &str = or(option_env!("TRIGONUM_WEBSITE"), "https://github.com/devedetti/trigonum");
+pub const DOWNLOADS: &str =
+    "https://software.opensuse.org/download.html?project=home%3Anachopro&package=trigonum";
+pub const REPOSITORY: &str =
+    or(option_env!("TRIGONUM_REPOSITORY"), "https://git.local.net.ar/nachopro/trigonum");
 pub const GETTEXT_PACKAGE: &str = "trigonum";
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 const LOCALEDIR: &str = or(option_env!("TRIGONUM_LOCALEDIR"), "/usr/share/locale");

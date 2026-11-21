@@ -4,6 +4,7 @@ cargo_target_dir = meson.project_build_root() / 'cargo-target'
 cargo_env = environment()
 cargo_env.set('TRIGONUM_APP_ID', app_id)
 cargo_env.set('TRIGONUM_WEBSITE', website)
+cargo_env.set('TRIGONUM_REPOSITORY', repository)
 cargo_env.set('TRIGONUM_LOCALEDIR', localedir)
 cargo_env.set('CARGO_TARGET_DIR', cargo_target_dir)
 

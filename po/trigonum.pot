@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: trigonum 0.1.2\n"
 "Report-Msgid-Bugs-To: https://github.com/devedetti/trigonum/issues\n"
-"POT-Creation-Date: 2026-11-21 13:40-0300\n"
+"POT-Creation-Date: 2026-11-21 14:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -290,7 +290,7 @@ msgstr ""
 msgid "Height (Z)"
 msgstr ""
 
-#: src/window.rs:202 src/window.rs:453
+#: src/window.rs:202 src/window.rs:466
 msgid "Ready"
 msgstr ""
 
@@ -312,24 +312,47 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 
-#: src/window.rs:312
+#: src/window.rs:308
 msgid "Lightweight viewer for STL 3D models"
 msgstr ""
 
-#: src/window.rs:358
+#: src/window.rs:310
+msgid ""
+"Made so you don't have to rely on JavaScript or intrusive websites: simple "
+"and easy to use. Available for Debian, Ubuntu, Fedora, openSUSE and Arch."
+msgstr ""
+
+#: src/window.rs:322
+msgid "Repository"
+msgstr ""
+
+#. TRANSLATORS: credits page, under "Created by".
+#: src/window.rs:324
+msgid "nachopro, from Argentina"
+msgstr ""
+
+#: src/window.rs:328
+msgid "Binaries for distros"
+msgstr ""
+
+#: src/window.rs:329
+msgid "Issues and PRs"
+msgstr ""
+
+#: src/window.rs:371
 msgid "STL models"
 msgstr ""
 
-#: src/window.rs:362
+#: src/window.rs:375
 msgid "All files"
 msgstr ""
 
-#: src/window.rs:368
+#: src/window.rs:381
 msgid "Open STL Model"
 msgstr ""
 
 #. TRANSLATORS: window title; {name} is the file name.
-#: src/window.rs:464
+#: src/window.rs:477
 #, rust-format
 msgid "{name} — Trigonum"
 msgstr ""
