@@ -1,0 +1,6 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Configuración de compilación del proyecto home:nachopro en OBS (pestaña "Project Config").
+# Se aplica con: osc meta prjconf home:nachopro -F packaging/obs/prjconf
+
+# Debian 13: libjpeg-dev lo proveen dos paquetes y OBS no elige solo.
+Prefer: libjpeg62-turbo-dev

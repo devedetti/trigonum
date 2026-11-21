@@ -7,6 +7,12 @@ proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+### Corregido
+
+- Debian 13 en OBS: se agrega `packaging/obs/prjconf` con `Prefer: libjpeg62-turbo-dev`.
+  `libjpeg-dev` lo proveen dos paquetes y OBS no elegía solo, así que marcaba el build
+  como irresolvable.
+
 ## [0.1.2] - 2026-11-21
 
 ### Agregado
