@@ -5,16 +5,41 @@ caso y cómo se publica una versión.
 
 ## Resumen
 
+Un ciclo completo, de la 0.1.2 a la 0.1.3:
+
 ```mermaid
-flowchart LR
-    main[(main)] -->|al empezar un ciclo| next[next]
-    feat1[feat/a] -->|PR| next
-    feat2[fix/b] -->|PR| next
-    next -->|se renombra| rel[release/X.Y.Z]
-    rel -->|bump-version.sh| rel
-    rel -->|PR: el RC| main
-    main -->|al mergear| pub([tag vX.Y.Z + OBS + AUR])
+%%{init: {'theme': 'base', 'gitGraph': {'mainBranchName': 'main'}, 'themeVariables': {
+  'git0': '#2e9d4f', 'git1': '#3b6fd8', 'git2': '#e8890c', 'git3': '#8e44ad', 'git4': '#d6336c',
+  'gitBranchLabel0': '#ffffff', 'gitBranchLabel1': '#ffffff', 'gitBranchLabel2': '#ffffff',
+  'gitBranchLabel3': '#ffffff', 'gitBranchLabel4': '#ffffff',
+  'gitInv4': '#ffffff',
+  'commitLabelColor': '#222222', 'commitLabelBackground': '#f2f2f2',
+  'tagLabelColor': '#ffffff', 'tagLabelBackground': '#2e9d4f', 'tagLabelBorder': '#1f6e37'
+}} }%%
+gitGraph
+   commit id: "0.1.2" tag: "v0.1.2"
+   branch next
+   branch "feat/icono"
+   commit id: "nuevo ícono"
+   checkout next
+   merge "feat/icono" id: "PR de feat/icono"
+   branch "fix/stl"
+   commit id: "arregla STL"
+   checkout next
+   merge "fix/stl" id: "PR de fix/stl"
+   branch "release/0.1.3"
+   commit id: "bump 0.1.3" type: HIGHLIGHT
+   commit id: "arreglo del RC"
+   checkout main
+   merge "release/0.1.3" id: "RC aprobado" tag: "v0.1.3"
 ```
+
+- `next` sale de `main` y recibe las features por PR.
+- `release/0.1.3` es `next` **renombrada**: por eso `next` termina justo donde empieza
+  `release/0.1.3`. Ahí se sube la versión (el commit marcado) y, si hace falta, se arregla
+  lo que aparezca al probar el RC.
+- Mergear `release/0.1.3` a `main` publica la versión: tag `v0.1.3`, OBS y AUR. El próximo
+  ciclo crea una `next` nueva desde `main`.
 
 | Rama | Vida | Para qué | Qué corre el CI en sus PR |
 |---|---|---|---|
