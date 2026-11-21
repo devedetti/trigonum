@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Trigonum
+GenericName=3D Model Viewer
+Comment=View STL 3D models
+# TRANSLATORS: search terms, separated by semicolons. Keep the English ones and the final semicolon.
+Keywords=3D;STL;model;mesh;printing;CAD;
+Exec=trigonum %F
+Icon=@APP_ID@
+Terminal=false
+StartupNotify=true
+Categories=Graphics;3DGraphics;Viewer;
+MimeType=model/stl;model/x.stl-binary;model/x.stl-ascii;

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: CC0-1.0 -->
+<component type="desktop-application">
+  <id>@APP_ID@</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <name>Trigonum</name>
+  <summary>View STL 3D models</summary>
+  <developer id="ar.net.local">
+    <name translate="no">nachopro</name>
+  </developer>
+
+  <description>
+    <p>
+      Trigonum is a fast, lightweight viewer for STL files, the format used
+      for 3D printing and for exporting models from CAD programs.
+    </p>
+    <ul>
+      <li>Opens binary and ASCII STL files, even with millions of triangles</li>
+      <li>Shows dimensions, triangle count, volume and surface area</li>
+      <li>Optional wireframe overlay</li>
+      <li>Reloads the model automatically when the file changes on disk</li>
+      <li>Classic interface with menu bar, toolbar and status bar</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">@APP_ID@.desktop</launchable>
+  <url type="homepage">@WEBSITE@</url>
+  <url type="bugtracker">@WEBSITE@/issues</url>
+  <url type="vcs-browser">@REPOSITORY@</url>
+  <translation type="gettext">trigonum</translation>
+
+  <provides>
+    <binary>trigonum</binary>
+    <mediatype>model/stl</mediatype>
+  </provides>
+
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+  </supports>
+
+  <content_rating type="oars-1.1"/>
+
+  <releases>
+    <release version="@VERSION@" date="2026-11-14">
+      <description>
+        <p>First release.</p>
+      </description>
+    </release>
+  </releases>
+</component>

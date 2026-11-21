@@ -1,0 +1,28 @@
+# Cargo
+/target/
+
+# Meson (directorios de build habituales)
+/build/
+/builddir/
+/_build/
+
+# makepkg: lo que genera al armar el paquete
+/packaging/arch/src/
+/packaging/arch/pkg/
+/packaging/arch/*.tar.gz
+/packaging/arch/*.tar.zst
+/packaging/arch/*.log
+
+# gettext: catálogos compilados y respaldos de msgmerge
+*.mo
+*.po~
+
+# Editores e IDEs
+*.code-workspace
+.vscode/
+.idea/
+*.swp
+*~
+
+# Configuración local de Claude Code
+.claude/settings.local.json

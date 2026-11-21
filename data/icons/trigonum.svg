@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="top" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b4d0f2"/>
+      <stop offset="1" stop-color="#8bb2e4"/>
+    </linearGradient>
+    <linearGradient id="left" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5b8ccc"/>
+      <stop offset="1" stop-color="#4573b3"/>
+    </linearGradient>
+    <linearGradient id="right" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3c67a6"/>
+      <stop offset="1" stop-color="#2d5089"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="64" cy="114" rx="42" ry="7" fill="#000" opacity="0.18"/>
+  <!-- Caras del cubo -->
+  <path d="M64 12 110 38 64 64 18 38Z" fill="url(#top)"/>
+  <path d="M18 38 64 64 64 114 18 88Z" fill="url(#left)"/>
+  <path d="M110 38 64 64 64 114 110 88Z" fill="url(#right)"/>
+  <!-- Facetas (triangulación, como en un STL) -->
+  <g fill="none" stroke="#fff" stroke-opacity="0.45" stroke-width="1.6" stroke-linecap="round">
+    <path d="M18 38 110 38"/>
+    <path d="M18 38 64 114"/>
+    <path d="M110 38 64 114"/>
+  </g>
+  <!-- Aristas -->
+  <g fill="none" stroke="#1d3b6b" stroke-width="2.5" stroke-linejoin="round">
+    <path d="M64 12 110 38 110 88 64 114 18 88 18 38Z"/>
+    <path d="M18 38 64 64 110 38M64 64 64 114"/>
+  </g>
+</svg>

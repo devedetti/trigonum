@@ -1,0 +1,319 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the trigonum package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: trigonum 0.1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/devedetti/trigonum/issues\n"
+"POT-Creation-Date: 2026-11-14 18:07-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: data/trigonum.desktop.in.in:3 data/trigonum.metainfo.xml.in.in:8
+msgid "Trigonum"
+msgstr ""
+
+#: data/trigonum.desktop.in.in:4
+msgid "3D Model Viewer"
+msgstr ""
+
+#: data/trigonum.desktop.in.in:5 data/trigonum.metainfo.xml.in.in:9
+msgid "View STL 3D models"
+msgstr ""
+
+#. TRANSLATORS: search terms, separated by semicolons. Keep the English ones and the final semicolon.
+#: data/trigonum.desktop.in.in:7
+msgid "3D;STL;model;mesh;printing;CAD;"
+msgstr ""
+
+#: data/trigonum.metainfo.xml.in.in:15
+msgid ""
+"Trigonum is a fast, lightweight viewer for STL files, the format used for 3D "
+"printing and for exporting models from CAD programs."
+msgstr ""
+
+#: data/trigonum.metainfo.xml.in.in:20
+msgid "Opens binary and ASCII STL files, even with millions of triangles"
+msgstr ""
+
+#: data/trigonum.metainfo.xml.in.in:21
+msgid "Shows dimensions, triangle count, volume and surface area"
+msgstr ""
+
+#: data/trigonum.metainfo.xml.in.in:22
+msgid "Optional wireframe overlay"
+msgstr ""
+
+#: data/trigonum.metainfo.xml.in.in:23
+msgid "Reloads the model automatically when the file changes on disk"
+msgstr ""
+
+#: data/trigonum.metainfo.xml.in.in:24
+msgid "Classic interface with menu bar, toolbar and status bar"
+msgstr ""
+
+#: data/trigonum.metainfo.xml.in.in:48
+msgid "First release."
+msgstr ""
+
+#. TRANSLATORS: thousands separator for large numbers, e.g. "1,234,567".
+#: src/i18n.rs:20
+msgctxt "thousands separator"
+msgid ","
+msgstr ""
+
+#. TRANSLATORS: decimal separator, e.g. "12.34".
+#: src/i18n.rs:25
+msgctxt "decimal separator"
+msgid "."
+msgstr ""
+
+#: src/stl.rs:19
+#, rust-format
+msgid "Cannot open the file: {error}"
+msgstr ""
+
+#: src/stl.rs:22
+msgid "The file is empty"
+msgstr ""
+
+#: src/stl.rs:47
+msgid "This does not look like a valid STL file"
+msgstr ""
+
+#: src/stl.rs:69
+msgid "Invalid number in ASCII STL file"
+msgstr ""
+
+#: src/stl.rs:113
+msgid "The file contains no triangles"
+msgstr ""
+
+#: src/window.rs:76
+msgid "_Open…"
+msgstr ""
+
+#: src/window.rs:76
+msgid "_Reload"
+msgstr ""
+
+#: src/window.rs:80
+msgid "_Close"
+msgstr ""
+
+#: src/window.rs:80
+msgid "_Quit"
+msgstr ""
+
+#: src/window.rs:86
+msgid "_Wireframe"
+msgstr ""
+
+#: src/window.rs:86
+msgid "_Information Panel"
+msgstr ""
+
+#: src/window.rs:88
+msgid "_Fit Model"
+msgstr ""
+
+#: src/window.rs:90
+msgid "_Mouse Controls"
+msgstr ""
+
+#: src/window.rs:90
+msgid "_About Trigonum"
+msgstr ""
+
+#: src/window.rs:93
+msgid "_File"
+msgstr ""
+
+#: src/window.rs:94
+msgid "_View"
+msgstr ""
+
+#: src/window.rs:95
+msgid "_Help"
+msgstr ""
+
+#: src/window.rs:144
+msgid "Open"
+msgstr ""
+
+#: src/window.rs:144
+msgid "Open a file (Ctrl+O)"
+msgstr ""
+
+#: src/window.rs:145
+msgid "Reload"
+msgstr ""
+
+#: src/window.rs:145
+msgid "Reload the model (Ctrl+R)"
+msgstr ""
+
+#: src/window.rs:147
+msgid "Fit"
+msgstr ""
+
+#: src/window.rs:147
+msgid "Fit the model in view (F)"
+msgstr ""
+
+#: src/window.rs:148
+msgid "Wireframe"
+msgstr ""
+
+#: src/window.rs:148
+msgid "Show mesh edges (W)"
+msgstr ""
+
+#: src/window.rs:149
+msgid "Information"
+msgstr ""
+
+#: src/window.rs:149
+msgid "Show model information (I)"
+msgstr ""
+
+#: src/window.rs:153
+msgid ""
+"No model open.\n"
+"\n"
+"Use File → Open (Ctrl+O) or drop an STL file on this window."
+msgstr ""
+
+#: src/window.rs:202
+msgid "Model"
+msgstr ""
+
+#: src/window.rs:203
+msgid "Triangles"
+msgstr ""
+
+#: src/window.rs:204
+msgid "Volume"
+msgstr ""
+
+#: src/window.rs:205
+msgid "Surface area"
+msgstr ""
+
+#: src/window.rs:206
+msgid "Dimensions (mm)"
+msgstr ""
+
+#: src/window.rs:207
+msgid "Width (X)"
+msgstr ""
+
+#: src/window.rs:208
+msgid "Depth (Y)"
+msgstr ""
+
+#: src/window.rs:209
+msgid "Height (Z)"
+msgstr ""
+
+#: src/window.rs:228
+msgid "Ready"
+msgstr ""
+
+#: src/window.rs:287
+msgid "Mouse Controls"
+msgstr ""
+
+#: src/window.rs:289
+msgid ""
+"Left button + drag: orbit\n"
+"Middle or right button + drag: pan\n"
+"Shift + left button + drag: pan\n"
+"Scroll wheel: zoom\n"
+"Double click: fit model"
+msgstr ""
+
+#. TRANSLATORS: replace with your name(s), one per line, e.g. "Jane Doe <jane@example.com>".
+#: src/window.rs:296
+msgid "translator-credits"
+msgstr ""
+
+#: src/window.rs:303
+msgid "Lightweight viewer for STL 3D models"
+msgstr ""
+
+#: src/window.rs:335
+msgid "OpenGL is not available"
+msgstr ""
+
+#: src/window.rs:340
+msgid "Could not initialize OpenGL"
+msgstr ""
+
+#: src/window.rs:442
+msgid "STL models"
+msgstr ""
+
+#: src/window.rs:446
+msgid "All files"
+msgstr ""
+
+#: src/window.rs:452
+msgid "Open STL Model"
+msgstr ""
+
+#: src/window.rs:515
+msgid "Cannot open file"
+msgstr ""
+
+#: src/window.rs:515
+msgid "Only local files are supported."
+msgstr ""
+
+#. TRANSLATORS: window title; {name} is the file name.
+#: src/window.rs:522
+#, rust-format
+msgid "{name} — Trigonum"
+msgstr ""
+
+#: src/window.rs:523
+#, rust-format
+msgid "Loading {path}…"
+msgstr ""
+
+#: src/window.rs:540
+msgid "internal error while reading"
+msgstr ""
+
+#: src/window.rs:551
+#, rust-format
+msgid "{count} triangle"
+msgid_plural "{count} triangles"
+msgstr[0] ""
+msgstr[1] ""
+
+#. TRANSLATORS: status bar. {name}: file, {triangles}: "N triangles", {size}: "X × Y × Z", {ms}: milliseconds.
+#: src/window.rs:556
+#, rust-format
+msgid "{name}  ·  {triangles}  ·  {size} mm  ·  loaded in {ms} ms"
+msgstr ""
+
+#. TRANSLATORS: same as the "loaded" message, after the file changed on disk.
+#: src/window.rs:559
+#, rust-format
+msgid "{name}  ·  {triangles}  ·  {size} mm  ·  reloaded in {ms} ms"
+msgstr ""
+
+#: src/window.rs:589
+#, rust-format
+msgid "Could not open “{name}”"
+msgstr ""

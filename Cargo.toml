@@ -1,0 +1,25 @@
+[package]
+name = "trigonum"
+version = "0.1.0"
+edition = "2024"
+description = "Lightweight viewer for STL 3D models"
+license = "GPL-3.0-or-later"
+repository = "https://git.local.net.ar/nachopro/trigonum"
+homepage = "https://github.com/devedetti/trigonum"
+rust-version = "1.88"
+publish = false
+
+[dependencies]
+gettext-rs = { version = "0.8.0", features = ["gettext-system"] }
+glam = "0.34.3"
+glow = "0.18.0"
+gtk = { version = "0.11.5", package = "gtk4", features = ["v4_12"] }
+libloading = "0.9.1"
+memmap2 = "0.9.12"
+
+# El parser y la app se sienten lentos en debug con archivos grandes.
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 2
