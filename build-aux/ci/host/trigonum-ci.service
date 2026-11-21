@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Reconstruye las imágenes trigonum-ci/* y limpia lo que dejan los jobs.
+# Va en /etc/systemd/system/ del servidor del runner, junto con trigonum-ci.timer.
+# Espera un clon del repo en /opt/trigonum; cambiá la ruta si lo tenés en otro lado.
+[Unit]
+Description=Imágenes de CI de Trigonum: reconstrucción semanal y limpieza de Docker
+Wants=network-online.target
+After=network-online.target docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/trigonum
+ExecStartPre=/usr/bin/git -C /opt/trigonum pull --ff-only
+ExecStart=/opt/trigonum/build-aux/ci/build-images.sh
+ExecStartPost=/opt/trigonum/build-aux/ci/host/cleanup.sh

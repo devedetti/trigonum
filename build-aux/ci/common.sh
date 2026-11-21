@@ -8,6 +8,7 @@ say() { printf '\n==> %s\n' "$*"; }
 fail() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 version() { sed -n 's/^version = "\(.*\)"/\1/p' "$src/Cargo.toml" | head -n1; }
 deb_version() { sed -n '1s/^trigonum (\([^)]*\)).*/\1/p' "$src/debian/changelog"; }
+in_ci_image() { [ "${TRIGONUM_CI_IMAGE:-0}" = 1 ]; }
 distro() { . /etc/os-release; echo "$ID-${VERSION_ID:-rolling}"; }
 
 check_binary() {

@@ -2,8 +2,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Compila e instala el paquete de Arch con el código local (PKGBUILD.local), como root.
 . "$(dirname "$0")/common.sh"
-say "Herramientas"
-pacman -Syu --noconfirm --needed -q base-devel git namcap rust sudo >/dev/null
+if ! in_ci_image; then
+  say "Herramientas"
+  pacman -Syu --noconfirm --needed -q base-devel git namcap rust sudo >/dev/null
+fi
 id builder >/dev/null 2>&1 || useradd -m builder
 echo 'builder ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/builder
 

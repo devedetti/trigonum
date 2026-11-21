@@ -2,11 +2,16 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Corre localmente con Docker lo mismo que el CI de Forgejo.
 # Uso: build-aux/ci/run-local.sh <debian|ubuntu|arch|fedora|opensuse|all>
-# Los paquetes quedan en ci-out/<distro>/.
+# Los paquetes quedan en ci-out/<distro>/. Si existen las imágenes trigonum-ci/<distro>
+# (build-aux/ci/build-images.sh) las usa; con CI_IMAGES=0 usa las imágenes base.
 set -eu
 root=$(cd "$(dirname "$0")/../.." && pwd)
 
 image_of() {
+  if [ "${CI_IMAGES:-1}" = 1 ] && docker image inspect "trigonum-ci/$1:latest" >/dev/null 2>&1; then
+    echo "trigonum-ci/$1:latest"
+    return
+  fi
   case $1 in
     debian) echo debian:trixie ;;
     ubuntu) echo ubuntu:26.04 ;;

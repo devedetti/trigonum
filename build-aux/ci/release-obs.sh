@@ -4,9 +4,11 @@
 # Variables: OBS_USER, OBS_PASSWORD, OBS_PROJECT (por defecto home:$OBS_USER), DRY_RUN=1 para no subir.
 . "$(dirname "$0")/common.sh"
 export DEBIAN_FRONTEND=noninteractive
-say "Herramientas"
-apt-get update -qq
-apt-get install -y -qq --no-install-recommends ca-certificates cargo xz-utils dpkg-dev osc >/dev/null
+if ! in_ci_image; then
+  say "Herramientas"
+  apt-get update -qq
+  apt-get install -y -qq --no-install-recommends ca-certificates cargo xz-utils dpkg-dev osc >/dev/null
+fi
 
 v=$(version)
 pkgdir=$(mktemp -d)

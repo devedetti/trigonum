@@ -5,8 +5,10 @@
 # Variables: AUR_SSH_KEY (clave privada), DRY_RUN=1 para no pushear, AUR_WAIT_SECONDS (1800).
 . "$(dirname "$0")/common.sh"
 aur_host_key='aur.archlinux.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEuBKrPzbawxA/k2g6NcyV5jmqwJ2s+zpgZGZ7tpLIcN'
-say "Herramientas"
-pacman -Syu --noconfirm --needed -q base-devel git openssh pacman-contrib sudo >/dev/null
+if ! in_ci_image; then
+  say "Herramientas"
+  pacman -Syu --noconfirm --needed -q base-devel git openssh pacman-contrib sudo >/dev/null
+fi
 id builder >/dev/null 2>&1 || useradd -m builder
 
 v=$(version)

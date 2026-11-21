@@ -93,6 +93,11 @@ build-aux/ci/run-local.sh all        # o: debian, ubuntu, arch, fedora, opensuse
 Los paquetes quedan en `ci-out/`. La versión mínima de Rust es 1.85, la de Debian 13:
 clippy avisa si se usa algo más nuevo.
 
+El CI usa imágenes propias (`trigonum-ci/debian`, `ubuntu`, `arch`, `fedora` y `opensuse`)
+con todo preinstalado. Se construyen en el servidor del runner con
+`build-aux/ci/build-images.sh`, y `build-aux/ci/host/` trae un timer de systemd que las
+reconstruye cada semana y limpia lo que dejan los jobs.
+
 ## Traducciones
 
 Los textos se extraen con gettext (carpeta `po/`). Para agregar un idioma:

@@ -6,16 +6,32 @@ spec="$src/packaging/rpm/trigonum.spec"
 v=$(version)
 grep -q "^Version: *$v$" "$spec" || fail "trigonum.spec no está en la versión $v"
 
-say "Herramientas y dependencias de compilación"
 if command -v dnf >/dev/null; then
-  dnf -y -q install rpm-build cargo xz 'dnf-command(builddep)'
-  dnf -y -q builddep "$spec"
+  install_tools() { dnf -y -q install rpm-build cargo xz 'dnf-command(builddep)'; }
+  install_builddeps() { dnf -y -q builddep "$spec"; }
   install_rpm() { dnf -y -q install "$@"; }
 else
-  zypper -n -q refresh
-  zypper -n -q install rpm-build cargo xz
-  rpmspec -q --buildrequires "$spec" | sed 's/ //g' | xargs zypper -n -q install
+  install_tools() {
+    zypper -n -q refresh
+    if rpm -q busybox-gawk >/dev/null 2>&1; then zypper -n -q install gawk '!busybox-gawk'; fi
+    zypper -n -q install rpm-build cargo xz
+  }
+  install_builddeps() { rpmspec -q --buildrequires "$spec" | sed 's/ //g' | xargs zypper -n -q install; }
   install_rpm() { zypper -n -q install --allow-unsigned-rpm "$@"; }
+fi
+missing_builddeps() {
+  rpmspec -q --buildrequires "$spec" | while read -r req; do
+    rpm -q --whatprovides "$req" >/dev/null 2>&1 || echo "$req"
+  done
+}
+
+if ! in_ci_image; then
+  say "Herramientas"
+  install_tools
+fi
+if [ -n "$(missing_builddeps)" ]; then
+  say "Dependencias de compilación"
+  install_builddeps
 fi
 
 top=$(mktemp -d)

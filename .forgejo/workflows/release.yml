@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Al mergear a main: si la versión de Cargo.toml todavía no tiene tag, la publica.
 # Crea el tag, sube el paquete fuente a OBS (Debian, Ubuntu, Fedora, openSUSE) y actualiza el AUR.
-# Necesita: variable OBS_USER y secretos OBS_PASSWORD y AUR_SSH_KEY (Ajustes → Actions).
+# Necesita: variable OBS_USER y secretos OBS_PASSWORD y AUR_SSH_KEY (Ajustes → Actions),
+# y las imágenes trigonum-ci/debian y trigonum-ci/arch en el runner (build-aux/ci/build-images.sh).
 name: Release
 
 on:
@@ -54,10 +55,8 @@ jobs:
     needs: [check, tag]
     runs-on: docker
     container:
-      image: debian:trixie
+      image: trigonum-ci/debian:latest
     steps:
-      - name: Herramientas
-        run: apt-get update -qq && apt-get install -y -qq --no-install-recommends nodejs git ca-certificates
       - uses: https://code.forgejo.org/actions/checkout@v4
       - name: Subir el paquete fuente a OBS
         env:
@@ -70,10 +69,8 @@ jobs:
     needs: [check, tag]
     runs-on: docker
     container:
-      image: archlinux:latest
+      image: trigonum-ci/arch:latest
     steps:
-      - name: Herramientas
-        run: pacman -Syu --noconfirm --needed -q nodejs git
       - uses: https://code.forgejo.org/actions/checkout@v4
       - name: Actualizar el AUR
         env:

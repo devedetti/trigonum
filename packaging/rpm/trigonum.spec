@@ -3,7 +3,7 @@
 %global app_id ar.net.local.Trigonum
 
 Name:           trigonum
-Version:        0.1.1
+Version:        0.1.2
 Release:        1%{?dist}
 Summary:        Lightweight viewer for STL 3D models
 License:        GPL-3.0-or-later

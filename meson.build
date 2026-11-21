@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 project(
   'trigonum',
-  version: '0.1.1', # mantener igual que en Cargo.toml
+  version: '0.1.2', # mantener igual que en Cargo.toml
   license: 'GPL-3.0-or-later',
   meson_version: '>= 1.1',
 )

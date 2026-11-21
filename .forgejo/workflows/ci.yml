@@ -1,70 +1,62 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Cada PR: compila, testea e instala el paquete real en todas las distros soportadas.
-# Lo mismo se corre localmente con build-aux/ci/run-local.sh.
+# Usa las imágenes trigonum-ci/* del runner (build-aux/ci/build-images.sh), que ya traen
+# las herramientas y dependencias. Lo mismo se corre localmente con build-aux/ci/run-local.sh.
 name: CI
 
 on:
   pull_request:
-  push:
-    branches-ignore: [main]
+  workflow_dispatch:
+
+env:
+  CARGO_HOME: /root/.cargo
 
 jobs:
-  lint:
-    name: Versiones y clippy
+  arch:
+    name: arch + clippy
     runs-on: docker
     container:
-      image: archlinux:latest
+      image: trigonum-ci/arch:latest
     steps:
-      - name: Herramientas
-        run: pacman -Syu --noconfirm --needed -q nodejs git rust gcc pkgconf gtk4
       - uses: https://code.forgejo.org/actions/checkout@v4
+      - uses: https://code.forgejo.org/actions/cache@v4
+        with:
+          path: |
+            /root/.cargo/registry/index
+            /root/.cargo/registry/cache
+          key: cargo-${{ hashFiles('Cargo.lock') }}
+      - uses: https://code.forgejo.org/actions/cache@v4
+        with:
+          path: target
+          key: clippy-target-${{ hashFiles('Cargo.lock') }}-${{ github.sha }}
+          restore-keys: clippy-target-${{ hashFiles('Cargo.lock') }}-
       - name: Versiones coherentes
         run: build-aux/ci/check-version.sh
       - name: clippy (avisa si se usa algo más nuevo que Rust 1.85)
         run: cargo clippy --locked --all-targets -- -D warnings
-
-  deb:
-    name: ${{ matrix.image }}
-    runs-on: docker
-    strategy:
-      fail-fast: false
-      matrix:
-        image: ["debian:trixie", "ubuntu:26.04"]
-    container:
-      image: ${{ matrix.image }}
-    steps:
-      - name: Herramientas
-        run: apt-get update -qq && apt-get install -y -qq --no-install-recommends nodejs git ca-certificates
-      - uses: https://code.forgejo.org/actions/checkout@v4
-      - name: Compilar e instalar el .deb
-        run: build-aux/ci/build-deb.sh
-
-  rpm:
-    name: ${{ matrix.image }}
-    runs-on: docker
-    strategy:
-      fail-fast: false
-      matrix:
-        image: ["fedora:latest", "opensuse/tumbleweed:latest"]
-    container:
-      image: ${{ matrix.image }}
-    steps:
-      - name: Herramientas
-        run: |
-          if command -v dnf >/dev/null; then dnf -y -q install nodejs git-core
-          else zypper -n -q install nodejs-default git-core; fi
-      - uses: https://code.forgejo.org/actions/checkout@v4
-      - name: Compilar e instalar el .rpm
-        run: build-aux/ci/build-rpm.sh
-
-  arch:
-    name: archlinux
-    runs-on: docker
-    container:
-      image: archlinux:latest
-    steps:
-      - name: Herramientas
-        run: pacman -Syu --noconfirm --needed -q nodejs git
-      - uses: https://code.forgejo.org/actions/checkout@v4
-      - name: Compilar e instalar con makepkg
+      - name: Compilar, testear e instalar el paquete
         run: build-aux/ci/build-arch.sh
+
+  build:
+    name: ${{ matrix.distro }}
+    runs-on: docker
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { distro: debian, script: build-deb.sh }
+          - { distro: ubuntu, script: build-deb.sh }
+          - { distro: fedora, script: build-rpm.sh }
+          - { distro: opensuse, script: build-rpm.sh }
+    container:
+      image: trigonum-ci/${{ matrix.distro }}:latest
+    steps:
+      - uses: https://code.forgejo.org/actions/checkout@v4
+      - uses: https://code.forgejo.org/actions/cache@v4
+        with:
+          path: |
+            /root/.cargo/registry/index
+            /root/.cargo/registry/cache
+          key: cargo-${{ hashFiles('Cargo.lock') }}
+      - name: Compilar, testear e instalar el paquete
+        run: build-aux/ci/${{ matrix.script }}

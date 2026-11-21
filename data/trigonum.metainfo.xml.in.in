@@ -44,7 +44,10 @@
   <content_rating type="oars-1.1"/>
 
   <releases>
-    <release version="@VERSION@" date="2026-11-20">
+    <release version="@VERSION@" date="2026-11-21">
+      <url type="details">https://github.com/devedetti/trigonum/blob/main/CHANGELOG.md#012---2026-11-21</url>
+    </release>
+    <release version="0.1.1" date="2026-11-20">
       <description>
         <p>Fixed a crash on startup.</p>
       </description>

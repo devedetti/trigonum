@@ -7,6 +7,8 @@ proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-11-21
+
 ### Agregado
 
 - Paquetes para Debian 13, Ubuntu 26.04, Fedora y openSUSE Tumbleweed, compilados en el
@@ -17,6 +19,18 @@ proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 - Release automático al mergear a `main` con una versión nueva: crea el tag, sube el paquete
   fuente a OBS y actualiza el AUR.
 - `build-aux/bump-version.sh` cambia la versión en todos los archivos que la repiten.
+- Imágenes de CI propias (`trigonum-ci/*`), con las herramientas y dependencias ya
+  instaladas, para que cada job no las baje de nuevo. Se construyen con
+  `build-aux/ci/build-images.sh`. Los crates quedan en la caché de Actions mientras no
+  cambie el `Cargo.lock`, y clippy reutiliza lo compilado en la corrida anterior.
+- El CI corre solo en los PR, o a mano desde la pestaña Actions. Antes corría dos veces
+  por cada push a una rama con PR abierto.
+- Timer semanal para el servidor del runner (`build-aux/ci/host/`): reconstruye las
+  imágenes y limpia los contenedores, volúmenes y la caché de builds que dejan los jobs.
+- `PKGBUILD.local` usa los crates incluidos en el tarball en lugar de bajarlos.
+- En openSUSE, el CI reemplaza `busybox-gawk` por `gawk` antes de instalar `rpm-build`.
+  Las imágenes nuevas de Tumbleweed traen `busybox-gawk`, que choca con `gawk`, y zypper
+  cancelaba la instalación.
 
 ### Cambiado
 

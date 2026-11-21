@@ -3,7 +3,14 @@
 #   build-aux/dist-tarball.sh
 #   cd packaging/arch && makepkg -si -p PKGBUILD.local
 #
-# Reutiliza todo el PKGBUILD real y solo cambia de dónde sale el código.
+# Reutiliza todo el PKGBUILD real y solo cambia de dónde sale el código: usa los crates
+# incluidos en vendor/ en lugar de bajarlos.
 source ./PKGBUILD
 source=("$pkgname-$pkgver.tar.xz")
 sha256sums=('SKIP')
+
+prepare() {
+  mkdir -p "$srcdir/cargo-home"
+  printf '[source.crates-io]\nreplace-with = "vendored-sources"\n\n[source.vendored-sources]\ndirectory = "%s"\n' \
+    "$srcdir/$pkgname-$pkgver/vendor" > "$srcdir/cargo-home/config.toml"
+}

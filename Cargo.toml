@@ -1,6 +1,6 @@
 [package]
 name = "trigonum"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 description = "Lightweight viewer for STL 3D models"
 license = "GPL-3.0-or-later"
