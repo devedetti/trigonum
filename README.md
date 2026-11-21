@@ -4,12 +4,30 @@
 
 > *trigonum*: «triángulo» en latín. Un archivo STL no es más que una lista de triángulos.
 
-Visor rápido y liviano de modelos 3D en formato STL para Linux, con una interfaz
-de escritorio clásica: barra de menús, barra de herramientas y barra de estado.
-Hecho con GTK 4 y OpenGL.
+Visor rápido y liviano de modelos 3D en formato STL para Linux, hecho con GTK 4 y OpenGL.
 
 El repositorio original está en [git.local.net.ar/nachopro/trigonum](https://git.local.net.ar/nachopro/trigonum);
-[GitHub](https://github.com/devedetti/trigonum) es un espejo. Los issues y los PR van en GitHub.
+[GitHub](https://github.com/devedetti/trigonum) es un mirror. Los issues y los PR van en GitHub.
+
+## Por qué lo hice
+
+Hace unas semanas que vengo diseñando modelos 3D en OpenSCAD que después un vecino
+me imprime. Cada vez que exportaba un STL y quería ver si había quedado bien, tenía
+que abrirlo en alguna página web: lenta, pesada, llena de publicidad, con el modelo
+trabándose cada vez que lo quería girar. Para algo que hacés una y otra vez en el día,
+es un martirio.
+
+Así que me hice mi propio visor. Ahora abro el archivo y aparece al toque, lo giro
+y anda como un charango, y cuando guardo en OpenSCAD se actualiza solo. Corre a la velocidad
+de la luz y soy muy feliz.
+
+Detrás de todo esto hay una convicción: la web es para páginas, no para programas.
+Está bárbara para el homebanking o para leer un blog, pero cuando tenés que laburar
+en serio, JavaScript no es opción: todo se pone lento, aparecen los lags y encima te
+tenés que bancar los anuncios y la basura que viene de yapa. Un programa de escritorio
+hecho como la gente arranca rápido, usa lo que tiene que usar y no te pide nada a cambio.
+
+Que vuelvan las apps de escritorio.
 
 ## Características
 

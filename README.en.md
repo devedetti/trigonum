@@ -4,11 +4,30 @@
 
 > *trigonum*: Latin for “triangle”. An STL file is nothing but a list of triangles.
 
-A fast, lightweight viewer for STL 3D models on Linux, with a classic desktop
-interface (menu bar, toolbar, status bar). Built with GTK 4 and OpenGL.
+A fast, lightweight viewer for STL 3D models on Linux, built with GTK 4 and OpenGL.
 
 The main repository lives at [git.local.net.ar/nachopro/trigonum](https://git.local.net.ar/nachopro/trigonum);
 [GitHub](https://github.com/devedetti/trigonum) is a mirror. Issues and pull requests go on GitHub.
+
+## Why I made this
+
+For a few weeks now I've been designing 3D models in OpenSCAD, which a neighbour then
+prints for me. Every time I exported an STL and wanted to check it had come out right,
+I had to open it in some website: slow, heavy, full of ads, with the model stuttering
+every time I tried to rotate it. For something you do over and over during the day,
+it was torture.
+
+So I made my own viewer. Now I open the file and it's there instantly, it rotates
+smoothly, and when I save in OpenSCAD it reloads by itself. It runs at the speed of
+light and I'm very happy.
+
+Behind all this there's a conviction: the web is for pages, not for programs. It's
+great for online banking or reading a blog, but when you have real work to do,
+JavaScript isn't an option: everything gets slow, the lag kicks in, and on top of that
+you have to put up with the ads and all the junk that comes along for free. A desktop
+program done right starts fast, uses what it needs and asks nothing in return.
+
+Bring back desktop apps.
 
 
 ## Features
