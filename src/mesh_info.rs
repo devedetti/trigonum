@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 use glam::Vec3;
 
-/// Estadísticas del modelo, acumuladas mientras se parsea.
 #[derive(Debug, Clone)]
 pub struct MeshInfo {
     pub triangles: usize,

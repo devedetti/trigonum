@@ -7,6 +7,7 @@ mod renderer;
 mod stl;
 mod tab;
 mod window;
+mod window_state;
 
 use gettextrs::{LocaleCategory, bind_textdomain_codeset, bindtextdomain, setlocale, textdomain};
 use gtk::prelude::*;
@@ -38,7 +39,9 @@ fn main() -> glib::ExitCode {
         let a = app.downgrade();
         quit.connect_activate(move |_, _| {
             if let Some(app) = a.upgrade() {
-                app.quit();
+                for w in app.windows() {
+                    w.close();
+                }
             }
         });
         app.add_action(&quit);

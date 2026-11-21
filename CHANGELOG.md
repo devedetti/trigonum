@@ -21,6 +21,9 @@ proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 - Ver → Pestaña siguiente / anterior (`Ctrl+Tab` / `Ctrl+Mayús+Tab`); también funcionan
   `Ctrl+AvPág` / `Ctrl+RePág`, y `Alt+1`…`Alt+8` saltan a esa pestaña (`Alt+9`, a la
   última). Las pestañas se pueden reordenar arrastrándolas.
+- La ventana recuerda su tamaño, si estaba maximizada y si el panel de información estaba
+  abierto (`~/.config/trigonum/window.ini`). La posición no se puede guardar: en GTK 4 la
+  decide el gestor de ventanas.
 - Instrucciones de instalación para cada distro en los READMEs.
 - Flujo de ramas feature → `next` → `release/X.Y.Z` → `main`. `next` es temporal: sale de
   `main` en cada ciclo y se renombra a `release/X.Y.Z` para el RC, así no queda ninguna rama

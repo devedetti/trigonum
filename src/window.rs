@@ -12,6 +12,7 @@ use crate::{
     i18n::{dec, fill, gettext, int},
     mesh_info::MeshInfo,
     tab::Tab,
+    window_state::WindowState,
 };
 
 struct InfoLabels {
@@ -25,11 +26,11 @@ struct InfoLabels {
 
 pub struct Viewer {
     window: gtk::ApplicationWindow,
-    /// "empty" (ningún archivo abierto) o "tabs".
     outer: gtk::Stack,
     notebook: gtk::Notebook,
     status: gtk::Label,
     info: InfoLabels,
+    panel: gtk::ScrolledWindow,
     tabs: RefCell<Vec<Rc<Tab>>>,
 }
 
@@ -37,17 +38,14 @@ thread_local! {
     static VIEWER: RefCell<Option<Rc<Viewer>>> = const { RefCell::new(None) };
 }
 
-/// Ejecuta `f` con el objeto si sigue vivo (los closures guardan `Weak` para no formar ciclos).
 pub fn with<T>(w: &Weak<T>, f: impl FnOnce(Rc<T>)) {
     if let Some(v) = w.upgrade() {
         f(v)
     }
 }
 
-/// Acciones que solo tienen sentido con al menos una pestaña abierta.
 const TAB_ACTIONS: &[&str] = &["reload", "fit", "wireframe", "close-tab", "next-tab", "prev-tab", "goto-tab"];
 
-/// Barra de menús clásica. GTK muestra los atajos al lado de cada opción.
 pub fn menubar() -> gio::Menu {
     let section = |items: &[(String, &str)]| {
         let m = gio::Menu::new();
@@ -109,7 +107,9 @@ impl Viewer {
                 .get_or_insert_with(|| {
                     let v = Self::build(app);
                     v.window.connect_close_request(|_| {
-                        VIEWER.with(|c| c.borrow_mut().take());
+                        if let Some(v) = VIEWER.with(|c| c.borrow_mut().take()) {
+                            v.save_state();
+                        }
                         glib::Propagation::Proceed
                     });
                     v
@@ -122,8 +122,18 @@ impl Viewer {
         self.window.present();
     }
 
+    fn save_state(&self) {
+        let (width, height) = self.window.default_size();
+        WindowState {
+            width,
+            height,
+            maximized: self.window.is_maximized(),
+            info_panel: self.panel.is_visible(),
+        }
+        .save();
+    }
+
     fn build(app: &gtk::Application) -> Rc<Self> {
-        // Barra de herramientas.
         let toolbar = gtk::Box::new(gtk::Orientation::Horizontal, 2);
         toolbar.add_css_class("toolbar");
         let tb = |icon, label: String, tip: String, action, toggle| {
@@ -136,7 +146,6 @@ impl Viewer {
         tb(None, gettext("Wireframe"), gettext("Show mesh edges (W)"), "win.wireframe", true);
         tb(Some("dialog-information"), gettext("Information"), gettext("Show model information (I)"), "win.info", true);
 
-        // Área central: vacío / pestañas.
         let empty = gtk::Label::new(Some(&gettext(
             "No model open.\n\nUse File → Open (Ctrl+O) or drop an STL file on this window.",
         )));
@@ -149,7 +158,6 @@ impl Viewer {
         outer.add_named(&empty, Some("empty"));
         outer.add_named(&notebook, Some("tabs"));
 
-        // Panel de información (grilla de etiquetas).
         let grid = gtk::Grid::builder()
             .row_spacing(6)
             .column_spacing(12)
@@ -183,11 +191,12 @@ impl Viewer {
         let z = field(&grid, r + 2, &gettext("Height (Z)"));
         let info = InfoLabels { triangles, x, y, z, volume, area: area_l };
 
+        let saved = WindowState::load();
         let panel = gtk::ScrolledWindow::builder()
             .hscrollbar_policy(gtk::PolicyType::Never)
             .child(&grid)
             .width_request(230)
-            .visible(false)
+            .visible(saved.info_panel)
             .build();
 
         let paned = gtk::Paned::new(gtk::Orientation::Horizontal);
@@ -197,7 +206,6 @@ impl Viewer {
         paned.set_shrink_end_child(false);
         paned.set_vexpand(true);
 
-        // Barra de estado.
         let status = gtk::Label::builder()
             .label(gettext("Ready"))
             .xalign(0.0)
@@ -219,21 +227,20 @@ impl Viewer {
             .application(app)
             .title("Trigonum")
             .icon_name(config::APP_ID)
-            .default_width(1100)
-            .default_height(750)
+            .default_width(saved.width)
+            .default_height(saved.height)
+            .maximized(saved.maximized)
             .show_menubar(true)
             .child(&vbox)
             .build();
 
-        let this = Rc::new(Self { window, outer, notebook, status, info, tabs: RefCell::default() });
-        this.setup_actions(&panel);
+        let this = Rc::new(Self { window, outer, notebook, status, info, panel, tabs: RefCell::default() });
+        this.setup_actions();
         this.setup_drop(&paned);
 
-        // `page` cambia después de que el Notebook ya pasó a la pestaña nueva.
         let w = Rc::downgrade(&this);
         this.notebook.connect_page_notify(move |_| with(&w, |v| v.refresh()));
 
-        // Redibujar si cambia el tema (fondo claro/oscuro).
         if let Some(settings) = gtk::Settings::default() {
             let w = Rc::downgrade(&this);
             settings.connect_gtk_theme_name_notify(move |_| {
@@ -248,7 +255,7 @@ impl Viewer {
         this
     }
 
-    fn setup_actions(self: &Rc<Self>, panel: &gtk::ScrolledWindow) {
+    fn setup_actions(self: &Rc<Self>) {
         let win = &self.window;
         let simple = |name: &str, f: fn(&Rc<Viewer>)| {
             let a = gio::SimpleAction::new(name, None);
@@ -275,7 +282,6 @@ impl Viewer {
         simple("next-tab", |v| v.cycle_tab(1));
         simple("prev-tab", |v| v.cycle_tab(-1));
 
-        // goto-tab(n): pestaña n (desde 0); -1 es la última.
         let goto = gio::SimpleAction::new("goto-tab", Some(glib::VariantTy::INT32));
         let w = Rc::downgrade(self);
         goto.connect_activate(move |_, param| {
@@ -346,7 +352,7 @@ impl Viewer {
         });
         win.add_action(&wire);
 
-        win.add_action(&gio::PropertyAction::new("info", panel, "visible"));
+        win.add_action(&gio::PropertyAction::new("info", &self.panel, "visible"));
     }
 
     fn action(&self, name: &str) -> Option<gio::SimpleAction> {
@@ -392,8 +398,6 @@ impl Viewer {
         });
     }
 
-    /// Abre cada archivo en su pestaña. Solo el primero queda visible; el resto se
-    /// parsea recién cuando se lo muestra.
     pub fn open_files(self: &Rc<Self>, files: &[gio::File]) {
         for (i, f) in files.iter().enumerate() {
             self.open(f.clone(), i == 0);
@@ -403,14 +407,12 @@ impl Viewer {
     fn open(self: &Rc<Self>, file: gio::File, focus: bool) {
         let existing = self.tabs.borrow().iter().find(|t| t.state.borrow().file.equal(&file)).cloned();
         let tab = match existing {
-            // Ya estaba abierto: se relee, igual que al abrirlo de nuevo antes de las pestañas.
             Some(t) => {
                 t.mark_stale();
                 t
             }
             None => {
                 let t = Tab::new(self, file);
-                // Antes de agregar la página: el Notebook avisa del cambio de pestaña en el acto.
                 self.tabs.borrow_mut().push(t.clone());
                 self.notebook.append_page(&t.page, Some(&t.label));
                 self.notebook.set_tab_reorderable(&t.page, true);
@@ -425,7 +427,6 @@ impl Viewer {
 
     pub fn close_tab(self: &Rc<Self>, tab: &Rc<Tab>) {
         tab.shutdown();
-        // `tab` sigue vivo mientras se quita la página, así su GLArea libera el renderer.
         if let Some(n) = self.notebook.page_num(&tab.page) {
             self.notebook.remove_page(Some(n));
         }
@@ -451,7 +452,6 @@ impl Viewer {
         self.current_tab().is_some_and(|t| std::ptr::eq(&*t, tab))
     }
 
-    /// Sincroniza título, barra de estado, panel de información y acciones con la pestaña visible.
     fn refresh(&self) {
         let tab = self.current_tab();
         for name in TAB_ACTIONS {

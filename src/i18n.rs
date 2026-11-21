@@ -36,12 +36,10 @@ fn group(digits: &str, sep: &str) -> String {
     out
 }
 
-/// Entero con separador de miles.
 pub fn int(n: usize) -> String {
     group(&n.to_string(), &thousands_sep())
 }
 
-/// Número con `places` decimales y los separadores del idioma.
 pub fn dec(x: f64, places: usize) -> String {
     let s = format!("{:.*}", places, x.abs());
     let (whole, frac) = s.split_once('.').unwrap_or((&s, ""));

@@ -19,7 +19,6 @@ impl Default for Camera {
 }
 
 impl Camera {
-    /// Encuadra la caja `min..max` con la vista isométrica por defecto.
     pub fn fit(&mut self, min: Vec3, max: Vec3) {
         self.target = (min + max) * 0.5;
         self.radius = ((max - min).length() * 0.5).max(1e-3);

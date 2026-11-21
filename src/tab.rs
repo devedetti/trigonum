@@ -20,7 +20,6 @@ use crate::{
 
 pub struct TabState {
     renderer: Option<Renderer>,
-    /// Malla recién cargada que espera ser subida a la GPU en el próximo render.
     pending: Option<stl::Mesh>,
     camera: Camera,
     bounds: Option<(Vec3, Vec3)>,
@@ -32,18 +31,13 @@ pub struct TabState {
     pub name: String,
     pub status: String,
     pub info: Option<MeshInfo>,
-    /// Las pestañas se parsean recién la primera vez que se muestran.
     loaded: bool,
-    /// El archivo cambió en disco mientras la pestaña estaba oculta.
     stale: bool,
 }
 
-/// Un archivo abierto: su vista 3D, su cámara y su estado de carga.
 pub struct Tab {
     viewer: Weak<Viewer>,
-    /// Contenido de la página del `Notebook`: "loading" / "view".
     pub page: gtk::Stack,
-    /// Solapa: nombre del archivo y botón de cerrar.
     pub label: gtk::Box,
     area: gtk::GLArea,
     pub state: RefCell<TabState>,
@@ -117,7 +111,6 @@ impl Tab {
 
         let w = Rc::downgrade(&this);
         close.connect_clicked(move |_| with(&w, |t| t.close()));
-        // Clic del medio sobre la solapa también la cierra.
         let middle = gtk::GestureClick::new();
         middle.set_button(2);
         let w = Rc::downgrade(&this);
@@ -140,7 +133,6 @@ impl Tab {
         self.viewer.upgrade().is_some_and(|v| v.is_current(self))
     }
 
-    /// Deja de vigilar el archivo; se llama al cerrar la pestaña.
     pub fn shutdown(&self) {
         let mut st = self.state.borrow_mut();
         if let Some(m) = st.monitor.take() {
@@ -151,7 +143,6 @@ impl Tab {
         }
     }
 
-    /// La pestaña pasó a ser la visible: carga lo que tenga pendiente.
     pub fn activated(self: &Rc<Self>) {
         let (loaded, stale) = {
             let st = self.state.borrow();
@@ -170,7 +161,6 @@ impl Tab {
         self.load(!loaded);
     }
 
-    /// Marca que hay que releer el archivo la próxima vez que se muestre.
     pub fn mark_stale(&self) {
         let mut st = self.state.borrow_mut();
         if st.loaded {
@@ -242,7 +232,6 @@ impl Tab {
     }
 
     fn setup_input(self: &Rc<Self>) {
-        // Arrastre: botón izquierdo orbita; medio, derecho o Shift+izquierdo desplazan.
         let drag = gtk::GestureDrag::new();
         drag.set_button(0);
         let last = Rc::new(Cell::new((0.0f64, 0.0f64)));
@@ -314,7 +303,6 @@ impl Tab {
         }
     }
 
-    /// Agrupa ráfagas de eventos (p. ej. guardado atómico) en una sola recarga.
     fn schedule_reload(self: &Rc<Self>) {
         let mut st = self.state.borrow_mut();
         if let Some(id) = st.reload_source.take() {
@@ -368,7 +356,7 @@ impl Tab {
             let res = handle.await;
             with(&w, |t| {
                 if t.state.borrow().generation != generation {
-                    return; // llegó una carga más nueva mientras tanto
+                    return;
                 }
                 match res {
                     Ok(Ok(mesh)) => t.set_mesh(&name, mesh, fresh, started.elapsed()),
@@ -431,7 +419,6 @@ impl Tab {
     }
 }
 
-/// Deduce si el tema GTK actual es oscuro a partir del color de texto del widget.
 fn theme_is_dark(w: &impl IsA<gtk::Widget>) -> bool {
     let c = w.color();
     0.299 * c.red() + 0.587 * c.green() + 0.114 * c.blue() > 0.5
