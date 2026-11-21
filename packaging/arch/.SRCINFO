@@ -18,6 +18,6 @@ pkgbase = trigonum
 	depends = libgcc
 	depends = pango
 	source = trigonum-0.1.1.tar.gz::https://github.com/devedetti/trigonum/archive/refs/tags/v0.1.1.tar.gz
-	sha256sums = SKIP
+	sha256sums = 453d35a4d4696701a769f920c955e589e8b6febde24d2666929541c1ef8af7e5
 
 pkgname = trigonum
